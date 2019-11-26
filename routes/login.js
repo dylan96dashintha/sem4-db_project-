@@ -14,10 +14,10 @@ router.post('/',function(req,res){
    // conn.query('SELECT username,psw FROM login',function(err,result){
     //     if(err) throw err
     //     for(x=0;x<result.length;x++){
-    //         var uname = result[x].username;
+    //           var uname = result[x].username;
     //         var psw = result[x].psw;
     //         if ( username == uname && pswd == psw){
-    //             res.redirect('/profile');
+                 res.redirect('/profile');
     //         }else{
     //             res.send('login unsuccessful...');
     //         }
