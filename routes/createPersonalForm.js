@@ -3,7 +3,7 @@ var router = express.Router();
 var conn = require('./connection');
 var customId = require('./generateCustomId');
 router.get('/',function(req,res,next){
-    res.render('createForm');
+    res.render('createPersonalForm');
 
 });
 
@@ -22,7 +22,7 @@ router.post('/',function(req,res){
     let psw = req.body.psw;
     let branchId = req.body.branchId;
     let custId = customId();
-    console.log(custId);
+    console.log(custId); 
     
     
     
