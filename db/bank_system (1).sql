@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 02, 2019 at 03:02 PM
+-- Generation Time: Dec 04, 2019 at 03:41 PM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.2
 
@@ -144,6 +144,8 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`customer_id`, `branch_id`) VALUES
+('753840', '0001'),
+('988442', '0001'),
 ('170138', '00123');
 
 -- --------------------------------------------------------
@@ -173,7 +175,8 @@ CREATE TABLE `customer_login` (
 --
 
 INSERT INTO `customer_login` (`username`, `customer_id`) VALUES
-('pasindusudesh', '170138');
+('pasindusudesh', '170138'),
+('pathumpankaja', '753840');
 
 -- --------------------------------------------------------
 
@@ -379,7 +382,6 @@ CREATE TABLE `loan_has_installement` (
 
 CREATE TABLE `login` (
   `username` varchar(100) NOT NULL,
-  `email_address` varchar(200) NOT NULL,
   `psw` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -387,9 +389,10 @@ CREATE TABLE `login` (
 -- Dumping data for table `login`
 --
 
-INSERT INTO `login` (`username`, `email_address`, `psw`) VALUES
-('dilangayum', 'dashinthadilan.17@cse.mrt.ac.lk', '12345678'),
-('pasindusudesh', 'pasindu@gmail.com', '87654321');
+INSERT INTO `login` (`username`, `psw`) VALUES
+('dilangayum', '12345678'),
+('pasindusudesh', '87654321'),
+('pathumpankaja', 'nimesh123');
 
 -- --------------------------------------------------------
 
@@ -468,6 +471,9 @@ CREATE TABLE `organization` (
   `reg_num` varchar(10) NOT NULL,
   `name` varchar(50) NOT NULL,
   `start_date` date DEFAULT NULL,
+  `street_num` varchar(100) NOT NULL,
+  `street` varchar(100) NOT NULL,
+  `city` varchar(100) NOT NULL,
   `contact_num` varchar(300) NOT NULL,
   `email_address` varchar(150) NOT NULL,
   `customer_id` varchar(10) NOT NULL
@@ -488,11 +494,17 @@ CREATE TABLE `person` (
   `street` varchar(200) NOT NULL,
   `city` varchar(100) NOT NULL,
   `dob` date NOT NULL,
-  `age` int(3) NOT NULL,
   `contact_num` varchar(300) NOT NULL,
   `email_address` varchar(150) NOT NULL,
   `customer_id` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `person`
+--
+
+INSERT INTO `person` (`nic`, `first_name`, `last_name`, `surname`, `street_num`, `street`, `city`, `dob`, `contact_num`, `email_address`, `customer_id`) VALUES
+('962142471v', 'Pathum', 'Pankaja,dewapura', 'undefined', '45,second ', 'kandewatta lane', 'galle', '1996-09-25', '+94776533802', 'sithcharith@gmail.com', '753840');
 
 -- --------------------------------------------------------
 
