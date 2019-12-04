@@ -10,7 +10,7 @@ var loginRouter = require('./routes/login');
 var empProfileRouter = require('./routes/empProfile');
 var customProfileRouter = require('./routes/customProfile');
 var createPersonalFormRouter = require('./routes/createPersonalForm');
-var createOragnizationalFormRouter = require('./routes/createOragnizationalForm');
+var createOrganizationalFormRouter = require('./routes/createOrganizationalForm');
 var app = express();
 
 // view engine setup
@@ -29,7 +29,7 @@ app.use('/login', loginRouter);
 app.use('/empProfile', empProfileRouter);
 app.use('/customProfile', customProfileRouter);
 app.use('/createPersonalForm', createPersonalFormRouter);
-app.use('/createOragnizationalForm',createOragnizationalFormRouter);
+app.use('/createOrganizationalForm',createOrganizationalFormRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
