@@ -927,12 +927,6 @@ ALTER TABLE `installement`
 ALTER TABLE `interest`
   ADD CONSTRAINT `interest_ibfk_1` FOREIGN KEY (`account_num`) REFERENCES `saving_account` (`account_num`);
 
---
--- Constraints for table `interest_rate_has_type`
---
-ALTER TABLE `interest_rate_has_type`
-  ADD CONSTRAINT `interest_rate_has_type_ibfk_1` FOREIGN KEY (`account_num`) REFERENCES `interest` (`account_num`),
-  ADD CONSTRAINT `interest_rate_has_type_ibfk_2` FOREIGN KEY (`account_num`) REFERENCES `account_type` (`account_num`);
 
 --
 -- Constraints for table `loan`
