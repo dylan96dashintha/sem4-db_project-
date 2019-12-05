@@ -75,7 +75,7 @@ router.post('/',function(req,res){
                                 if(err){
                                     res.send("Error in updating customer_login table");
                                 }else{
-                                    conn.query(`INSERT INTO account(account_num,branch_id,start_time,state,customer_id) VALUES ('${actId}','${branchId}',${curdate()},'true','${custId}')`,function(err,result){
+                                    conn.query(`INSERT INTO account(account_num,branch_id,start_time,state,customer_id) VALUES ('${actId}','${branchId}',curdate(),1,'${custId}')`,function(err,result){
                                         if (err) {
                                             res.send("unsuccessful in updating account table");
                                         }else {
