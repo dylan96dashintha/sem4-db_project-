@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var conn = require('./connection');
 var customId = require('./generateCustomId');
+var accountId = require('./generateAccountId');
 router.get('/',function(req,res,next){
     res.render('createPersonalForm');
 
@@ -22,22 +23,39 @@ router.post('/',function(req,res){
     let psw = req.body.psw;
     let branchId = req.body.branchId;
     let custId = customId();
+    let actId = accountId();
+    let type = req.body.type;
+    let balance = parseFloat(req.body.balance);
+    console.log(type);
     console.log(custId); 
     
     
-    
-    function check(){
+    function checkAccountId(){
+        actId = accountId();
+        console.log(custId);
+        conn.query('SELECT customer_id FROM customer WHERE customer_id = ' + custId , (err, result) => {
+            if(result.length != 0){
+                console.log(result.length);   
+                checkAccountId()
+            }
+        });
+        
+    }
+
+
+    function checkCustomId(){
         custId = customId();
         console.log(custId);
         conn.query('SELECT customer_id FROM customer WHERE customer_id = ' + custId , (err, result) => {
             if(result.length != 0){
                 console.log(result.length);   
-                check()
+                checkCustomId()
             }
         });
         
     }
-    check();
+    checkCustomId();
+    checkAccountId();
     console.log(custId);
    // console.log(`INSERT INTO customer(customer_id,branch_id) VALUES (${custId},${branchId})`);
     conn.query(`INSERT INTO customer(customer_id,branch_id) VALUES ('${custId}','${branchId}')`,function(err,result){
@@ -57,7 +75,34 @@ router.post('/',function(req,res){
                                 if(err){
                                     res.send("Error in updating customer_login table");
                                 }else{
-                                    res.send("successfully updated...");                
+                                    conn.query(`INSERT INTO account(account_num,branch_id,start_time,state,customer_id) VALUES ('${actId}','${branchId}',${curdate()},'true','${custId}')`,function(err,result){
+                                        if (err) {
+                                            res.send("unsuccessful in updating account table");
+                                        }else {
+                                            if(type){
+                                                conn.query(`INSERT INTO saving_account(account_num,transaction_count,balance) VALUES ('${actId}',0,'${balance}')`,function(err,result){
+                                                    if (err) {
+                                                        res.send("unable to update saving_account entity");
+                                                    }else{
+                                                        res.send("successfully updated the db...");   
+                                                    }
+                                                });
+                                            }else {
+                                                conn.query(`INSERT INTO current_account(account_num,balance) VALUES ('${actId}','${balance}')`,function(err,result){
+                                                    if (err) {
+                                                        res.send("unable to update current_account entity");
+                                                    }else {
+                                                        res.send("successfully updated the db...");
+                                                    }
+                                                
+                                                });
+                                  
+                                            }
+                                  
+                                        }
+                                   
+                                    });                
+                                
                                 }
                             
                             });
