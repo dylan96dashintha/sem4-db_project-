@@ -20,6 +20,7 @@ router.post('/',function(req,res){
     let city = req.body.city;
     let contactNum = req.body.contactNum;
     let email = req.body.email;
+    let custId = customId();
 
 
 

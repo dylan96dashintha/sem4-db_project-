@@ -30,19 +30,6 @@ router.post('/',function(req,res){
     console.log(custId); 
     
     
-    function checkAccountId(){
-        actId = accountId();
-        console.log(custId);
-        conn.query('SELECT customer_id FROM customer WHERE customer_id = ' + custId , (err, result) => {
-            if(result.length != 0){
-                console.log(result.length);   
-                checkAccountId()
-            }
-        });
-        
-    }
-
-
     function checkCustomId(){
         custId = customId();
         console.log(custId);
@@ -54,6 +41,22 @@ router.post('/',function(req,res){
         });
         
     }
+
+    
+    function checkAccountId(){
+        actId = accountId();
+        console.log(custId);
+        conn.query('SELECT account FROM customer WHERE account_id = ' + actId , (err, result) => {
+            if(result.length != 0){
+                console.log(result.length);   
+                checkAccountId()
+            }
+        });
+        
+    }
+
+
+   
     checkCustomId();
     checkAccountId();
     console.log(custId);
@@ -75,7 +78,7 @@ router.post('/',function(req,res){
                                 if(err){
                                     res.send("Error in updating customer_login table");
                                 }else{
-                                    conn.query(`INSERT INTO account(account_num,branch_id,start_time,state,customer_id) VALUES ('${actId}','${branchId}',curdate(),1,'${custId}')`,function(err,result){
+                                    conn.query(`INSERT INTO account(account_num,branch_id,balance,start_time,state,customer_id) VALUES ('${actId}','${branchId}','${balance}',curdate(),1,'${custId}')`,function(err,result){
                                         if (err) {
                                             res.send("unsuccessful in updating account table");
                                         }else {
