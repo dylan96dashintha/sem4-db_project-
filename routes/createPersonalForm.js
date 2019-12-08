@@ -46,7 +46,7 @@ router.post('/',function(req,res){
     function checkAccountId(){
         actId = accountId();
         console.log(custId);
-        conn.query('SELECT account FROM customer WHERE account_id = ' + actId , (err, result) => {
+        conn.query('SELECT account_num FROM account WHERE account_num = ' + actId , (err, result) => {
             if(result.length != 0){
                 console.log(result.length);   
                 checkAccountId()

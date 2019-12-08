@@ -41,8 +41,9 @@ router.post('/', function (req, res) {
                                     if (err) {
                                         res.send("unsuccessful in updating deposit entity");
                                     } else {
-                                        conn.query(`UPDATE account SET 'balance' =  'balance' + '${loanAmount}' WHERE account_num = '${actNum}'`, function (err, result) {
+                                        conn.query(`UPDATE account SET balance =  balance + ${loanAmount} WHERE account_num = '${actNum}'`, function (err, result) {
                                             if (err) {
+                                                //console.log(`UPDATE account SET 'balance' =  'balance' + ${loanAmount} WHERE account_num = '${actNum}'`);
                                                 res.send("unsuccessful in updating balance column entity");
                                             } else {
                                                 res.send("Successful in updating the db");
@@ -73,8 +74,8 @@ router.post('/', function (req, res) {
     }
 
     function checkTransactionId() {
-        transactionId = transaction_Id();
-        conn.query('SELECT transaction_id FROM transaction WHERE transaction_id = ' + transactionId, (err, result) => {
+        transId = transaction_Id();
+        conn.query('SELECT transaction_id FROM transaction WHERE transaction_id = ' + transId, (err, result) => {
             if (result.length != 0) {
                 console.log(result.length);
                 checkTransactionId();
