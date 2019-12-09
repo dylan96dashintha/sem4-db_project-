@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 02, 2019 at 03:02 PM
+-- Generation Time: Dec 04, 2019 at 03:41 PM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.2
 
@@ -144,6 +144,8 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`customer_id`, `branch_id`) VALUES
+('753840', '0001'),
+('988442', '0001'),
 ('170138', '00123');
 
 -- --------------------------------------------------------
@@ -173,7 +175,8 @@ CREATE TABLE `customer_login` (
 --
 
 INSERT INTO `customer_login` (`username`, `customer_id`) VALUES
-('pasindusudesh', '170138');
+('pasindusudesh', '170138'),
+('pathumpankaja', '753840');
 
 -- --------------------------------------------------------
 
@@ -270,15 +273,7 @@ CREATE TABLE `fixed_deposit` (
   `account_num` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `fixed_deposit_has_fd_plan`
---
-
-CREATE TABLE `fixed_deposit_has_fd_plan` (
-  `fd_id` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -334,15 +329,6 @@ CREATE TABLE `interest` (
   `account_num` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `interest_rate_has_type`
---
-
-CREATE TABLE `interest_rate_has_type` (
-  `account_num` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -360,16 +346,7 @@ CREATE TABLE `loan` (
   `account_num` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `loan_has_installement`
---
-
-CREATE TABLE `loan_has_installement` (
-  `loan_id` varchar(10) NOT NULL,
-  `installement_id` varchar(15) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -379,7 +356,6 @@ CREATE TABLE `loan_has_installement` (
 
 CREATE TABLE `login` (
   `username` varchar(100) NOT NULL,
-  `email_address` varchar(200) NOT NULL,
   `psw` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -387,9 +363,10 @@ CREATE TABLE `login` (
 -- Dumping data for table `login`
 --
 
-INSERT INTO `login` (`username`, `email_address`, `psw`) VALUES
-('dilangayum', 'dashinthadilan.17@cse.mrt.ac.lk', '12345678'),
-('pasindusudesh', 'pasindu@gmail.com', '87654321');
+INSERT INTO `login` (`username`, `psw`) VALUES
+('dilangayum', '12345678'),
+('pasindusudesh', '87654321'),
+('pathumpankaja', 'nimesh123');
 
 -- --------------------------------------------------------
 
@@ -468,6 +445,9 @@ CREATE TABLE `organization` (
   `reg_num` varchar(10) NOT NULL,
   `name` varchar(50) NOT NULL,
   `start_date` date DEFAULT NULL,
+  `street_num` varchar(100) NOT NULL,
+  `street` varchar(100) NOT NULL,
+  `city` varchar(100) NOT NULL,
   `contact_num` varchar(300) NOT NULL,
   `email_address` varchar(150) NOT NULL,
   `customer_id` varchar(10) NOT NULL
@@ -488,11 +468,17 @@ CREATE TABLE `person` (
   `street` varchar(200) NOT NULL,
   `city` varchar(100) NOT NULL,
   `dob` date NOT NULL,
-  `age` int(3) NOT NULL,
   `contact_num` varchar(300) NOT NULL,
   `email_address` varchar(150) NOT NULL,
   `customer_id` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `person`
+--
+
+INSERT INTO `person` (`nic`, `first_name`, `last_name`, `surname`, `street_num`, `street`, `city`, `dob`, `contact_num`, `email_address`, `customer_id`) VALUES
+('962142471v', 'Pathum', 'Pankaja,dewapura', 'undefined', '45,second ', 'kandewatta lane', 'galle', '1996-09-25', '+94776533802', 'sithcharith@gmail.com', '753840');
 
 -- --------------------------------------------------------
 
@@ -676,11 +662,7 @@ ALTER TABLE `fixed_deposit`
   ADD PRIMARY KEY (`fd_id`),
   ADD KEY `account_num` (`account_num`);
 
---
--- Indexes for table `fixed_deposit_has_fd_plan`
---
-ALTER TABLE `fixed_deposit_has_fd_plan`
-  ADD KEY `fd_id` (`fd_id`);
+
 
 --
 -- Indexes for table `fixed_deposit_has_loan`
@@ -709,11 +691,7 @@ ALTER TABLE `installement`
 ALTER TABLE `interest`
   ADD PRIMARY KEY (`account_num`);
 
---
--- Indexes for table `interest_rate_has_type`
---
-ALTER TABLE `interest_rate_has_type`
-  ADD KEY `account_num` (`account_num`);
+
 
 --
 -- Indexes for table `loan`
@@ -723,12 +701,6 @@ ALTER TABLE `loan`
   ADD KEY `fd_id` (`fd_id`),
   ADD KEY `account_num` (`account_num`);
 
---
--- Indexes for table `loan_has_installement`
---
-ALTER TABLE `loan_has_installement`
-  ADD KEY `loan_id` (`loan_id`),
-  ADD KEY `installement_id` (`installement_id`);
 
 --
 -- Indexes for table `login`
@@ -927,12 +899,7 @@ ALTER TABLE `fd_plan`
 ALTER TABLE `fixed_deposit`
   ADD CONSTRAINT `fixed_deposit_ibfk_1` FOREIGN KEY (`account_num`) REFERENCES `saving_account` (`account_num`);
 
---
--- Constraints for table `fixed_deposit_has_fd_plan`
---
-ALTER TABLE `fixed_deposit_has_fd_plan`
-  ADD CONSTRAINT `fixed_deposit_has_fd_plan_ibfk_1` FOREIGN KEY (`fd_id`) REFERENCES `fixed_deposit` (`fd_id`),
-  ADD CONSTRAINT `fixed_deposit_has_fd_plan_ibfk_2` FOREIGN KEY (`fd_id`) REFERENCES `fd_plan` (`fd_id`);
+
 
 --
 -- Constraints for table `fixed_deposit_has_loan`
@@ -960,12 +927,6 @@ ALTER TABLE `installement`
 ALTER TABLE `interest`
   ADD CONSTRAINT `interest_ibfk_1` FOREIGN KEY (`account_num`) REFERENCES `saving_account` (`account_num`);
 
---
--- Constraints for table `interest_rate_has_type`
---
-ALTER TABLE `interest_rate_has_type`
-  ADD CONSTRAINT `interest_rate_has_type_ibfk_1` FOREIGN KEY (`account_num`) REFERENCES `interest` (`account_num`),
-  ADD CONSTRAINT `interest_rate_has_type_ibfk_2` FOREIGN KEY (`account_num`) REFERENCES `account_type` (`account_num`);
 
 --
 -- Constraints for table `loan`
@@ -974,12 +935,6 @@ ALTER TABLE `loan`
   ADD CONSTRAINT `loan_ibfk_1` FOREIGN KEY (`fd_id`) REFERENCES `fixed_deposit` (`fd_id`),
   ADD CONSTRAINT `loan_ibfk_2` FOREIGN KEY (`account_num`) REFERENCES `account` (`account_num`);
 
---
--- Constraints for table `loan_has_installement`
---
-ALTER TABLE `loan_has_installement`
-  ADD CONSTRAINT `loan_has_installement_ibfk_1` FOREIGN KEY (`loan_id`) REFERENCES `loan` (`loan_id`),
-  ADD CONSTRAINT `loan_has_installement_ibfk_2` FOREIGN KEY (`installement_id`) REFERENCES `installement` (`installement_id`);
 
 --
 -- Constraints for table `money_tansfer`
