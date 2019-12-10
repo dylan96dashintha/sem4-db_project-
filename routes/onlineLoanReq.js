@@ -1,146 +1,32 @@
 var express = require('express');
 var router = express.Router();
 var conn = require('./connection');
-//var loan_Id = require('./generateLoanId');
-//var transaction_Id = require('./generateTransactionId');
 
 
 router.get('/', function (req, res, next) {
     res.render('onlineLoanReq');
 
 });
-
-
-
-router.post('/', function (req, res) {
-    let actNum = req.body.actNum;
-    let repayPeriod = req.body.repayPeriod;
-    let loanAmount = req.body.loanAmount;
-    let empSector = req.body.empSector;
-    let empType = req.body.empType;
-    let profession = req.body.profession;
-    let annualSalary = req.body.annualSalary;
-    //let loanId = loan_Id();
-    //let transactionId = transaction_Id();
-
-    function updateDB() {
-
-        conn.beginTransaction(function(err){
-            if (err) { throw err; }
-            conn.query(`INSERT INTO loan(loan_id,loan_amount,repayment_period,start_date,state,account_num) VALUES ('${loanId}','${loanAmount}','${repayPeriod}',curdate(),'1','${actNum}')`, function (err, result) {
-                if (err) {
-                    conn.rollback(function(err){
-                        res.send(err);
-                        res.send("unsuccessful in updating loan entity");
-                    });
-                }
-                    
-                conn.query(`INSERT INTO normal_loan(loan_id,account_num,emp_sector,emp_type,profession,total_salary) VALUES ('${loanId}','${actNum}','${empSector}','${empType}','${profession}','${annualSalary}')`, function (err, result) {
-                    if (err) {
-                        conn.rollback(function(err){
-                            res.send("unsuccessful in updating normal loan entity");
-                        });
-                    
-                    }
-
-                    conn.query(`INSERT INTO transaction(transaction_id,date,time_transaction,account_num) VALUES ('${transId}',curdate(),curtime(),'${actNum}')`, function (err, result) {
-                        if (err) {
-                            conn.rollback(function(err){
-                                res.send("unsuccessful in updating transaction entity");
-                            });
-                        }
-
-                        conn.query(`INSERT INTO deposit(deposit_amount,transaction_id) VALUES ('${loanAmount}','${transId}')`, function (err, result) {
-                            if (err) {
-                                conn.rollback(function(err){
-                                    res.send("unsuccessful in updating deposit entity");
-
-                                });
-                            }
-
-                            conn.query(`UPDATE account SET balance =  balance + ${loanAmount} WHERE account_num = '${actNum}'`, function (err, result) {
-                                if (err) {
-                                    conn.rollback(function(err){
-                                        res.send("unsuccessful in updating balance column entity");
-                                    });
-                                }
-
-                                conn.commit(function(err) {
-                                    if (err) { 
-                                      conn.rollback(function() {
-                                        throw err;
-                                      });
-                                    }
-                                    res.send("successfully updated");
-                                    console.log('Transaction Complete.');
-                                    conn.end();
-                                  });
-
-                            });
-
-                        });
-        
-                    });
-
-                });
-
-            });
-
-        });
-
-       // endTransaction();
-    }
+ router.post('/', function (req, res) {
+    let account_num = req.body.account_num;
+    let repayment = req.body.repayment;
+    let amount = req.body.amount;
+    //let fd_id = req.body.fd_id;
     
-    // function endTransaction(){
-    //     conn.end();
-    // }
 
-    function checkAccountNum() {
-        conn.query(`SELECT account_num FROM account WHERE account_num = '${actNum}'`, function (err, result) {
-            if (result.length != 0) {
-                updateDB();
-            } else {
-                res.send("fucker");
-            }
-        });
-    }
-
-    function checkTransactionId() {
-        transId = transaction_Id();
-        conn.query('SELECT transaction_id FROM transaction WHERE transaction_id = ' + transId, (err, result) => {
-            if (result.length != 0) {
-                console.log(result.length);
-                checkTransactionId();
-            } else {
-                console.log("check transaction complete...")
-                checkAccountNum();
-            }
-
-        });
-
-    }
-
-    function checkLoanId() {
-        loanId = loan_Id();
-        conn.query('SELECT loan_id FROM loan WHERE loan_id = ' + loanId, (err, result) => {
-            console.log(err)
-            if (result.length != 0) {
-                console.log(result.length);
-                checkLoanId();
-            } else {
-                console.log("check loAN complete...");
-                checkTransactionId();
-            }
-        });
-
-    }
-
-
-
-    checkLoanId();
-
-
-
+conn.connect(function(err) {
+    if (err) throw err;
+    console.log("Database connected successfully!");
+    console.log(fd_id);
+    var fd_id = "SELECT fd_id from fixed_deposit where account_num = '"+account_num+"'";
+    console.log(fd_id);
+    var sqlquery = "INSERT INTO loan (loan_id,loan_amount,repayment_period,start_date,state,fd_id,account_num) VALUES ('1','"+amount+"','"+repayment+"','45','1','"+fd_id+"','"+account_num+"')";
+  conn.query(sqlquery, function (err, result) {
+    if (err) throw err;
+        console.log(result.affectedRows + " record inserted");
+  });
 });
+ })
+//});
 
 module.exports = router;
