@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var session = require('express-session');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -13,6 +14,8 @@ var createPersonalFormRouter = require('./routes/createPersonalForm');
 var createOrganizationalFormRouter = require('./routes/createOrganizationalForm');
 var normalLoanRequestRouter = require('./routes/normalLoanRequest');
 var onlineLoanRequestRouter = require('./routes/onlineLoanReq');
+var depositMoneyRouter = require('./routes/depositMoney');
+var withdrawMoneyRouter = require('./routes/withdrawMoney');
 var app = express();
 
 // view engine setup
@@ -21,6 +24,11 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
+app.use(session({
+  secret :'ssshhhhh',
+  resave : false,
+  saveUninitialized : true,
+  }));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -34,6 +42,8 @@ app.use('/createPersonalForm', createPersonalFormRouter);
 app.use('/createOrganizationalForm', createOrganizationalFormRouter);
 app.use('/normalLoanRequest', normalLoanRequestRouter);
 app.use('/onlineLoanReq',onlineLoanRequestRouter);
+app.use('/depositMoney',depositMoneyRouter);
+app.use('/withdrawMoney',withdrawMoneyRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

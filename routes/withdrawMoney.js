@@ -1,17 +1,17 @@
 var express = require('express');
 var router = express.Router();
 var conn = require('./connection');
-var depositMoney = require('../functions/deposit');
+var withdrawMoney = require('../functions/withdraw');
 
-var accountNumber ;
+var accountNumber ; 
 
 router.get('/',function(req,res,next){
-    res.render('depositMoney');
+    res.render('withdrawMoney');
     
 });
 
-router.get('/deposit',function(req,res,next){
-    render('accdetails',{type:"deposit"});
+router.get('/withdraw',function(req,res,next){
+    render('accdetails',{type:"withdraw"});
 
 });
 
@@ -24,28 +24,32 @@ router.post('/',function(req,res){
             res.render('depositMoney',{error: error});
         }else{  
             req.session.accountNumber = accNo;
-            res.render('accdetails',{acc:result[0],accNo:accNo,type:"depositMoney/deposit"});
+            res.render('accdetails',{acc:result[0],accNo:accNo,type:"withdrawMoney/withdraw"});
         }
     });
 
 });
 
-router.post('/deposit',function(req,res){
+router.post('/withdraw',function(req,res){
     var amount = req.body.amount;
     var accNo = req.session.accountNumber;   
 
-    function deposit(err,result){
+    function withdraw(err,result){
         if(err){
     
-        }
-        else if(result == false){
-    
-        }else if(result){
-            console.log(result);
+        }else if (result == "NoBalance"){
+            console.log("No Balance in Account");
+        }else if (result == "success"){
+            console.log("Finally its ");
+        }else if(result == "limit"){
+            console.log("No money");
+        }else{
+            console.log(result);    
         }
     }
 
-    depositMoney(accNo,amount,deposit);  
+    withdrawMoney(accNo,amount,withdraw);  
+   
     res.send("s");
     
     
