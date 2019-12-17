@@ -26,8 +26,13 @@ router.post('/', function (req, res) {
         const response = JSON.parse(JSON.stringify(result));
         const fd_id = response[0].fd_id;
   
-        var sqlquery = "INSERT INTO loan (loan_id,loan_amount,repayment_period,start_date,state,fd_id,account_num) VALUES ('1','"+amount+"','"+repayment+"','45','1','"+fd_id+"','"+account_num+"')";
+        var sqlquery = "INSERT INTO loan (loan_id,loan_amount,repayment_period,start_date,state,fd_id,account_num) VALUES ('5','"+amount+"','"+repayment+"',curdate(),'1','"+fd_id+"','"+account_num+"')";
         conn.query(sqlquery, function (err, result) {
+          if (err) throw err;
+              console.log(result.affectedRows + " record inserted to loan");
+        });
+        var online_query ="INSERT INTO online_loan_system(loan_id,fd_id,maximum_amount)VALUES ('5','"+fd_id+"','5')";
+        conn.query(online_query, function (err, result) {
           if (err) throw err;
               console.log(result.affectedRows + " record inserted");
         });
