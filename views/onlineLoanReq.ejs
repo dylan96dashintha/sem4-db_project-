@@ -24,7 +24,7 @@
 <body>
     <div class="container">
  
-        <form action="onlineLoanForm" method="post" class="was-validated">
+        <form action="onlineLoanReq" method="post" class="was-validated">
           <div class="form-group">
             <label for="fulltName">Full Name:</label>
             <input type="text" class="form-control" id="fullName" placeholder="Enter Full Name" name="fullName" required>
@@ -54,16 +54,16 @@
             <div class="invalid-feedback">Please fill out this field.</div>
           </div>
 
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for="cousomer_id">FD ID:</label>
             <input type="text" class="form-control" id="fd_id" placeholder="Enter FD ID" name="fd_id" required>
             <div class="valid-feedback">Valid.</div>
             <div class="invalid-feedback">Please fill out this field.</div>
-          </div>
+          </div> -->
 
           <div class="form-group">
-            <label for="balance">Loan Ammount:</label>
-            <input type="number" class="form-control" id="ammount" placeholder="Enter Loan Ammount:" name="ammounts" required>
+            <label for="balance">Loan Amount:</label>
+            <input type="number" class="form-control" id="amount" placeholder="Enter Loan Amount:" name="amount" required>
             <div class="valid-feedback">Valid.</div>
             <div class="invalid-feedback">Please fill out this field.</div>
           </div>
@@ -103,7 +103,8 @@
           </div>
 
           
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary" onclick="window.location.href='./onlineLoanReq'">Submit</button>
+          
         
         </form>
       </div>

@@ -10,9 +10,14 @@ var usersRouter = require('./routes/users');
 var loginRouter = require('./routes/login');
 var empProfileRouter = require('./routes/empProfile');
 var customProfileRouter = require('./routes/customProfile');
-var createPersonalFormRouter = require('./routes/createPersonalForm');
+var createPersonalNewFormRouter = require('./routes/createPersonalNewForm');
+var createPersonalNewAccountRouter = require('./routes/createPersonalNewAccount');
+var createPersonalExistAccountRouter = require('./routes/createPersonalExistAccount');
 var createOrganizationalFormRouter = require('./routes/createOrganizationalForm');
 var normalLoanRequestRouter = require('./routes/normalLoanRequest');
+var onlineFDRouter = require('./routes/onlineFD');
+var loanInstallementRouter = require('./routes/loanInstallement');
+
 var onlineLoanRequestRouter = require('./routes/onlineLoanReq');
 var depositMoneyRouter = require('./routes/depositMoney');
 var withdrawMoneyRouter = require('./routes/withdrawMoney');
@@ -38,12 +43,17 @@ app.use('/users', usersRouter);
 app.use('/login', loginRouter);
 app.use('/empProfile', empProfileRouter);
 app.use('/customProfile', customProfileRouter);
-app.use('/createPersonalForm', createPersonalFormRouter);
+app.use('/createPersonalNewForm', createPersonalNewFormRouter);
+app.use('/createPersonalNewAccount', createPersonalNewAccountRouter);
 app.use('/createOrganizationalForm', createOrganizationalFormRouter);
+app.use('/createPersonalExistAccount', createPersonalExistAccountRouter);
 app.use('/normalLoanRequest', normalLoanRequestRouter);
 app.use('/onlineLoanReq',onlineLoanRequestRouter);
 app.use('/depositMoney',depositMoneyRouter);
 app.use('/withdrawMoney',withdrawMoneyRouter);
+app.use('/onlineFD' , onlineFDRouter);
+app.use('/onlineLoanReq' , onlineLoanRequestRouter);
+app.use('/loanInstallement' , loanInstallementRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
