@@ -9,22 +9,7 @@ router.get('/', function (req, res, next) {
 
     
     
-    conn.connect(function(err){
-    if (err) throw err;
-    console.log("Database connected successfully!");
-    var transaction_query = `SELECT date from transaction where account_num ="4789"`;
-    conn.query(transaction_query,function(err,result){
-    if (err) throw error;
-        
-        const response = JSON.parse(JSON.stringify(result));
-        const date = response[0].date;
-        console.log("df");
-        console.log(date);
-
-  
-    });
-
-    });
+    
      
 
 
