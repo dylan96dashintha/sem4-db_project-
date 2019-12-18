@@ -106,22 +106,22 @@ function deposit(accNo, amount, callback){
                         
                     }else if(result == "current"){
                         console.log("current");
-                        // changeBalance(accNo,amount,"current_account",function(err,result){
+                        changeBalance(accNo,amount,"current_account",function(err,result){
 
-                        //     if(result == "success"){
-                        //         callback(null,"currentSuccess");
-                        //         conn.commit(function(err) {
-                        //             if(err){
-                        //                 conn.rollback(function() {
-                        //                     console.error(err);
-                        //                 });
-                        //             }
-                        //             conn.end();
-                        //             // callback(null,"success"); 
-                        //         });
-                        //     }
+                            if(result == "success"){
+                                callback(null,"currentSuccess");
+                                conn.commit(function(err) {
+                                    if(err){
+                                        conn.rollback(function() {
+                                            console.error(err);
+                                        });
+                                    }
+                                    conn.end();
+                                    // callback(null,"success"); 
+                                });
+                            }
 
-                        // });
+                        });
                                           
 
                     }else if(result == "notAcc"){

@@ -20,7 +20,7 @@ router.post('/',function(req,res){
     conn.query("SELECT nic,first_name,last_name FROM person NATURAL JOIN account WHERE account_num ="+accNo,function(err,result){
         if(err) {
             var error = "Incorrect Account Number";
-            console.error(err);
+            console.error(error);
             res.render('depositMoney',{error: error});
         }else{  
             req.session.accountNumber = accNo;
@@ -46,7 +46,7 @@ router.post('/deposit',function(req,res){
     }
 
     depositMoney(accNo,amount,deposit);  
-    res.send("s");
+    res.send("ok");
     
     
 });
