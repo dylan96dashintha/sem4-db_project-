@@ -16,6 +16,7 @@ var createPersonalExistAccountRouter = require('./routes/createPersonalExistAcco
 var createOrganizationalFormRouter = require('./routes/createOrganizationalForm');
 var normalLoanRequestRouter = require('./routes/normalLoanRequest');
 var onlineFDRouter = require('./routes/onlineFD');
+var loanInstallementRouter = require('./routes/loanInstallement');
 
 var onlineLoanRequestRouter = require('./routes/onlineLoanReq');
 var app = express();
@@ -41,8 +42,9 @@ app.use('/createPersonalNewAccount', createPersonalNewAccountRouter);
 app.use('/createOrganizationalForm', createOrganizationalFormRouter);
 app.use('/createPersonalExistAccount', createPersonalExistAccountRouter);
 app.use('/normalLoanRequest', normalLoanRequestRouter);
-app.use('/onlineFD', onlineFDRouter);
-app.use('/onlineLoanReq',onlineLoanRequestRouter);
+app.use('/onlineFD' , onlineFDRouter);
+app.use('/onlineLoanReq' , onlineLoanRequestRouter);
+app.use('/loanInstallement' , loanInstallementRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
