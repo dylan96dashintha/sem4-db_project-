@@ -13,6 +13,11 @@ var createPersonalFormRouter = require('./routes/createPersonalForm');
 var createOrganizationalFormRouter = require('./routes/createOrganizationalForm');
 var normalLoanRequestRouter = require('./routes/normalLoanRequest');
 var onlineLoanRequestRouter = require('./routes/onlineLoanReq');
+var transactionRouter=require('./routes/transaction');
+var onlineTransferRouter=require('./routes/onlineTransfer');
+var atmWithdrawRouter=require('./routes/AtmWithdraw');
+var depositRouter=require('./routes/Deposit');
+var withdrawRouter=require('./routes/Withdraw');
 var app = express();
 
 // view engine setup
@@ -34,6 +39,11 @@ app.use('/createPersonalForm', createPersonalFormRouter);
 app.use('/createOrganizationalForm', createOrganizationalFormRouter);
 app.use('/normalLoanRequest', normalLoanRequestRouter);
 app.use('/onlineLoanReq',onlineLoanRequestRouter);
+app.use('/transaction',transactionRouter);
+app.use('/onlinetransfer',onlineTransferRouter);
+app.use('/atmwithdraw',atmWithdrawRouter);
+app.use('/deposit',depositRouter);
+app.use('/withdraw',withdrawRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
