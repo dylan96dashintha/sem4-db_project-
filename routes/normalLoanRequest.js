@@ -45,7 +45,7 @@ router.post('/', function (req, res) {
                     
                     }
 
-                    conn.query(`INSERT INTO transaction(transaction_id,date,time_transaction,account_num) VALUES ('${transId}',curdate(),curtime(),'${actNum}')`, function (err, result) {
+                    conn.query(`INSERT INTO transaction(transaction_id,date,time_transaction,transaction_type,account_num) VALUES ('${transId}',curdate(),curtime(),'loan','${actNum}')`, function (err, result) {
                         if (err) {
                             conn.rollback(function(err){
                                 res.send("unsuccessful in updating transaction entity");
