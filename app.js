@@ -19,6 +19,9 @@ var onlineFDRouter = require('./routes/onlineFD');
 var loanInstallementRouter = require('./routes/loanInstallement');
 
 var onlineLoanRequestRouter = require('./routes/onlineLoanReq');
+var accountDetailsRouter = require('./routes/accountDetails');
+var depositMoneyRouter = require('./routes/depositMoney');
+var withdrawMoneyRouter = require('./routes/withdrawMoney');
 var app = express();
 
 // view engine setup
@@ -27,7 +30,11 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(session({secret : 'sssdddd'}))
+app.use(session({
+  secret :'ssshhhhh',
+  resave : false,
+  saveUninitialized : true,
+  }));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -42,6 +49,10 @@ app.use('/createPersonalNewAccount', createPersonalNewAccountRouter);
 app.use('/createOrganizationalForm', createOrganizationalFormRouter);
 app.use('/createPersonalExistAccount', createPersonalExistAccountRouter);
 app.use('/normalLoanRequest', normalLoanRequestRouter);
+app.use('/onlineLoanReq',onlineLoanRequestRouter);
+app.use('/accountDetails',accountDetailsRouter);
+app.use('/depositMoney',depositMoneyRouter);
+app.use('/withdrawMoney',withdrawMoneyRouter);
 app.use('/onlineFD' , onlineFDRouter);
 app.use('/onlineLoanReq' , onlineLoanRequestRouter);
 app.use('/loanInstallement' , loanInstallementRouter);
