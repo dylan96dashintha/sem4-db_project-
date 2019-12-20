@@ -21,7 +21,7 @@ function getAccDetails(accNo,callback){
                     });
                 }
                 else{
-                    callback(null,"notAcc");
+                    callback(null,{accOwnerType: null , accType: null});
                 }
             });
         }
@@ -32,12 +32,12 @@ function isPersonalOrOrganization(accNo,callback){
      var details ={};
     conn.query(`SELECT * FROM person_details WHERE account_num = ${accNo}`,function(err,result){
         if(result.length == 1){
-            details = {accOwnerType: "personal" , nic: result[0].NIC, firstName: result[0].first_name, lastName: result[0].last_name, accNo: result[0].account_num, branch_id:result[0].branch_id};
+            details = {accOwnerType: "personal" , nic: result[0].nic, firstName: result[0].first_name, lastName: result[0].last_name, accNo: result[0].account_num, branchName:result[0].branch_name};
             callback(null,details);
         }else{
             conn.query(`SELECT * FROM organization_details WHERE account_num = ${accNo}`,function(err,result){
                 if(result.length == 1){
-                    details = {accOwnerType: "organization" , regNo: result[0].reg_num, name: result[0].name, accNo: result[0].account_num, branch_id:result[0].branch_id};
+                    details = {accOwnerType: "organization" , regNo: result[0].reg_num, name: result[0].name, accNo: result[0].account_num, branchName:result[0].branch_name};
                     callback(null,details);
                 }else{
                     callback(null, {accOwnerType: null , accType: null})
@@ -53,16 +53,25 @@ function isPersonalOrOrganization(accNo,callback){
  * 
 */
 
-function checkAccDetails(accNo, accHoldername, branch,callback){
+function checkAccDetails(accNo, accHoldername, branchName,callback){
 
     getAccDetails(accNo,function(err,result){
-        if((accHoldername == result.firstName || accHoldername == result.lastName) && branch == result.branch_id  ){ //brach id sholld be branch
-            callback(null, true);
-        }else{
-            callback(null, false);
-        }
+        console.log(result);
+        if(result.accOwnerType == "person"){
+            if((accHoldername == result.firstName || accHoldername == result.lastName) && branchName == result.branchName  ){ //brach id sholld be branch
+                callback(null, true);
+            }else{
+                callback(null, false);
+            }
+        }else if(result.accOwnerType == "organization"){
+            if(accHoldername == result.name && branchName ==result.branchName){
+                callback(null,true);
+            }else{
+                callback(null,false);
+            }
+        }else{callback(null,false);}
     });
 
 }
 
-module.exports = getAccDetails,checkAccDetails;
+module.exports = {getAccDetails,checkAccDetails};

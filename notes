@@ -2,5 +2,7 @@
 
 CREATE or REPLACE VIEW organization_details AS SELECT `reg_num`,`name`,`account_num`,`branch_id` FROM organization NATURAL JOIN account
 
-CREATE or REPLACE VIEW person_details AS SELECT `NIC`,`first_name`,`last_name`,`account_num`,`branch_id` FROM person NATURAL JOIN account
+
+
+CREATE OR REPLACE VIEW person_details AS SELECT person.nic as nic, person.first_name as first_name, person.last_name as last_name, account.account_num as account_num, branch.region as branch_regon, branch.name as branch_name FROM person, account, branch where person.customer_id = account.customer_id and account.branch_id = branch.branch_id;
 

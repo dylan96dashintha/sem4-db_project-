@@ -77,11 +77,18 @@ function changeBalance(accNo,amount,type,count,callback){
 //withdraw money from any type of account
 function withdraw(accNo, amount, callback){
 
-    check();
+    // check();
     var d = new Date();
     var date = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
     var time = d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
     let accType ;
+    var transID = d.getFullYear().toString()
+            +(d.getMonth()+1).toString()
+            +d.getDate().toString()
+            +d.getHours().toString()
+            +d.getMinutes().toString()
+            +d.getSeconds().toString()
+            +d.getMilliseconds().toString();
   
     conn.beginTransaction(function(err){
         if(err) throw err;
@@ -125,7 +132,7 @@ function withdraw(accNo, amount, callback){
                                                     console.error(err);
                                                 });
                                             }
-                                            conn.end();
+                                            // conn.end();
                                             callback(null,"success"); 
                                         });
 
@@ -140,7 +147,7 @@ function withdraw(accNo, amount, callback){
                                                     console.error(err);
                                                 }); 
                                             }
-                                            conn.end();
+                                            // conn.end();
                                             // callback(null,"success"); 
                                         });
 
@@ -151,7 +158,7 @@ function withdraw(accNo, amount, callback){
                                                     console.error(err);
                                                 });
                                             }
-                                            conn.end();
+                                            // conn.end();
                                             // callback(null,"success"); 
                                         });
                                     }                                     
@@ -164,12 +171,69 @@ function withdraw(accNo, amount, callback){
                         console.log("current"); 
                         changeBalance(accNo,amount,'current_account',result,function(err,result){
                             if(result == "success"){
-                                console.log("update current acc successfully");
-                            }                            
+                                conn.commit(function(err) {
+                                    if(err){
+                                        conn.rollback(function() {
+                                            console.error(err);
+                                        });
+                                    }
+                                    // conn.end();
+                                    callback(null,"success"); 
+                                });
+                            }else if(result == "NoBalance"){
+
+                                conn.rollback(function(err) {
+                                    // console.error(err);
+                                    callback(null,"NoBalance");
+                                });
+                                conn.commit(function(err) {
+                                    if(err){
+                                        conn.rollback(function() {
+                                            console.error(err);
+                                        }); 
+                                    }
+                                    // conn.end();
+                                    // callback(null,"success"); 
+                                });
+
+                            }else{
+
+                                conn.rollback(function(err) {
+                                    // console.error(err);
+                                    callback(null,"err");
+                                });
+                                conn.commit(function(err) {
+                                    if(err){
+                                        conn.rollback(function() {
+                                            console.error(err);
+                                        }); 
+                                    }
+                                    // conn.end();
+                                    // callback(null,"success"); 
+                                });
+
+                            }
+                            
+                            
+
                         });                       
 
                     }else if(result == "notAcc"){
                         console.log("Not account");
+
+                        conn.rollback(function(err) {
+                            // console.error(err);
+                            callback(null,"err");
+                        });
+                        conn.commit(function(err) {
+                            if(err){
+                                conn.rollback(function() {
+                                    console.error(err);
+                                }); 
+                            }
+                            // conn.end();
+                            // callback(null,"success"); 
+                        });
                     }
                 });
             });

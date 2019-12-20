@@ -1,15 +1,17 @@
 var conn = require('../routes/connection');
 var mysql = require('mysql');
-var transId;
+// var transId;
 
 function genarateTransactionId(){
     return Math.floor(Math.random() * (999999-100000) + 100000 );
 }
 
 function check(){
-    transID = genarateTransactionId();
-    conn.query('SELECT transaction_id FROM transaction WHERE transaction_id = '+ transID,function(err,result){
-        if(result.length != 0){
+     var transID = genarateTransactionId();
+    console.log(transID);
+    conn.query('SELECT COUNT(transaction_id) AS count FROM transaction WHERE transaction_id = '+ transID,function(err,result){
+        console.log(result);
+        if(result[0].count > 0){
             check();
         }
     });
@@ -54,15 +56,31 @@ function changeBalance(accNo,amount,type,callback){
 }
 
 function deposit(accNo, amount, callback){
-    check();
+    // check();
     var d = new Date();
     var date = d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate();
-    var time = d.getSeconds()+":"+d.getMinutes()+":"+d.getHours();
-    console.log(date);
-    console.log(time);
+    var time = d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
+    var transID = d.getFullYear().toString()
+            +(d.getMonth()+1).toString()
+            +d.getDate().toString()
+            +d.getHours().toString()
+            +d.getMinutes().toString()
+            +d.getSeconds().toString()
+            +d.getMilliseconds().toString();
+
+    // console.log(transID);
+    // console.log(date);
+    // console.log(time);
+    // console.log(d.getFullYear());
+    // console.log(d.getMonth());
+    // console.log(d.getDate());
+    // console.log(d.getHours());
+    // console.log(d.getMinutes());
+    // console.log(d.getSeconds());
+    // console.log(d.getMilliseconds());
 
     conn.beginTransaction(function(err){
-        if(err) throw err;
+        if(err) console.error(err);
         conn.query(`INSERT INTO transaction (transaction_id,date,time_transaction,account_num) VALUES ('${transID}','${date}','${time}','${accNo}')`,function(err,result) {
             if(err){
                 conn.rollback(function(err){
@@ -96,7 +114,7 @@ function deposit(accNo, amount, callback){
                                             console.error(err);
                                         });
                                     }
-                                    conn.end();
+                                    // conn.end();
                                     // callback(null,"success"); 
                                 });
                             }
@@ -116,7 +134,7 @@ function deposit(accNo, amount, callback){
                                             console.error(err);
                                         });
                                     }
-                                    conn.end();
+                                    // conn.end();
                                     // callback(null,"success"); 
                                 });
                             }

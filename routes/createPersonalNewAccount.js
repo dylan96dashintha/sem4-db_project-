@@ -19,7 +19,7 @@ router.post('/',function(req,res){
                 res.redirect('/createPersonalNewForm')
             
             }else{
-                res.redirect('createPersonalExistAccount' );
+                res.redirect('/createPersonalExistAccount' );
             }
         }
 
