@@ -21,6 +21,8 @@ var loanInstallementRouter = require('./routes/loanInstallement');
 var onlineLoanRequestRouter = require('./routes/onlineLoanReq');
 var depositMoneyRouter = require('./routes/depositMoney');
 var withdrawMoneyRouter = require('./routes/withdrawMoney');
+var moneyTransferRouter = require('./routes/moneyTransfer');
+
 var app = express();
 
 // view engine setup
@@ -54,6 +56,7 @@ app.use('/withdrawMoney',withdrawMoneyRouter);
 app.use('/onlineFD' , onlineFDRouter);
 app.use('/onlineLoanReq' , onlineLoanRequestRouter);
 app.use('/loanInstallement' , loanInstallementRouter);
+app.use('/moneyTransfer',moneyTransferRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

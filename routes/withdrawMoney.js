@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var conn = require('./connection');
-var withdrawMoney = require('../functions/withdraw');
+var withdrawMoney = require('../models/withdraw');
 
 var accountNumber ; 
 

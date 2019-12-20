@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var conn = require('./connection');
-var depositMoney = require('../functions/deposit');
+var depositMoney = require('../models/deposit');
 
 var accountNumber ;
 
