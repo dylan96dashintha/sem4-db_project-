@@ -19,6 +19,7 @@ var onlineFDRouter = require('./routes/onlineFD');
 var loanInstallementRouter = require('./routes/loanInstallement');
 
 var onlineLoanRequestRouter = require('./routes/onlineLoanReq');
+var accountDetailsRouter = require('./routes/accountDetails');
 var depositMoneyRouter = require('./routes/depositMoney');
 var withdrawMoneyRouter = require('./routes/withdrawMoney');
 var moneyTransferRouter = require('./routes/moneyTransfer');
@@ -51,6 +52,7 @@ app.use('/createOrganizationalForm', createOrganizationalFormRouter);
 app.use('/createPersonalExistAccount', createPersonalExistAccountRouter);
 app.use('/normalLoanRequest', normalLoanRequestRouter);
 app.use('/onlineLoanReq',onlineLoanRequestRouter);
+app.use('/accountDetails',accountDetailsRouter);
 app.use('/depositMoney',depositMoneyRouter);
 app.use('/withdrawMoney',withdrawMoneyRouter);
 app.use('/onlineFD' , onlineFDRouter);
