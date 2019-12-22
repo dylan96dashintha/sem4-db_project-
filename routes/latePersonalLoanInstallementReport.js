@@ -3,7 +3,15 @@ var router = express.Router();
 var conn = require('./connection');
 
 router.get('/',function(req,res,next){
-    var nameList = []  ;
+    let branchId;
+    let emp_id = req.session.emp_id;
+    conn.query(`SELECT branch_id FROM employee where emp_id = '${emp_id}'` , function(err,result){
+        if(err){
+            console.log(err);
+        }else{
+            branchId = result[0].branch_id;
+            console.log(branchId);
+            var nameList = []  ;
     var lastNameList = [];
     var nicList = [];
     var customerIdList = [];
@@ -16,7 +24,7 @@ router.get('/',function(req,res,next){
 
         } else {
             console.log('success');
-            conn.query(`SELECT account_num,email_address,contact_num,person.customer_id,nic,first_name,last_name FROM lateloanreport,person WHERE lateloanreport.customer_id = person.customer_id` , function(err,result){
+            conn.query(`SELECT account_num,email_address,contact_num,person.customer_id,nic,first_name,last_name FROM lateloanreport,person WHERE lateloanreport.customer_id = person.customer_id AND lateloanreport.branch_id = '${branchId}'` , function(err,result){
                 if(err){
                     console.log(err);
                 }else {
@@ -48,6 +56,11 @@ router.get('/',function(req,res,next){
             
         }
     });
+            
+        }
+    });
+
+    
 });
 
 
