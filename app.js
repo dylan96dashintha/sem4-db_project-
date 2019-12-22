@@ -17,12 +17,13 @@ var createOrganizationalFormRouter = require('./routes/createOrganizationalForm'
 var normalLoanRequestRouter = require('./routes/normalLoanRequest');
 var onlineFDRouter = require('./routes/onlineFD');
 var loanInstallementRouter = require('./routes/loanInstallement');
-
+var branchManagerProfileRouter = require('./routes/branchManagerProfile');
 var onlineLoanRequestRouter = require('./routes/onlineLoanReq');
 var accountDetailsRouter = require('./routes/accountDetails');
 var depositMoneyRouter = require('./routes/depositMoney');
 var withdrawMoneyRouter = require('./routes/withdrawMoney');
 var moneyTransferRouter = require('./routes/moneyTransfer');
+var lateLoanInstallementReportRouter = require('./routes/lateLoanInstallementReport');
 
 var app = express();
 
@@ -59,6 +60,8 @@ app.use('/onlineFD' , onlineFDRouter);
 app.use('/onlineLoanReq' , onlineLoanRequestRouter);
 app.use('/loanInstallement' , loanInstallementRouter);
 app.use('/moneyTransfer',moneyTransferRouter);
+app.use('/branchManagerProfile' , branchManagerProfileRouter);
+app.use('/lateLoanInstallementReport' , lateLoanInstallementReportRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
