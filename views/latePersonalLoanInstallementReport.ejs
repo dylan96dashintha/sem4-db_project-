@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <title>profile</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <style>
+  .tab{
+    align-content: center;
+  }
+
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    align-content: center;
+  }
+  </style>
+  
+
+
+
+
+  <body>
+    <h1 style="text-align: center;">Personal Late Loan Installement Report</h1>
+    <div id="tab">
+      <table>
+        <tr>
+          <th>NIC</th>
+          <th>Customer ID</th>
+          <th>Account Number</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Contact Number</th>
+          <th>Email Address</th>
+        </tr>
+
+        <% for(var i=0; i < name1.length; i++) { %>
+           <tr>
+             <td><%= nic[i] %></td>
+             <td><%= customNum[i] %></td>
+             <td><%= account[i] %></td>
+             <td><%= name1[i] %></td>
+             <td><%= nameLast[i] %></td>
+             <td><%= tel[i] %></td>
+             <td><%= email[i] %></td>
+             
+           </tr>
+        <% } %>
+        </table>
+      
+
+    </div>
+      
+  </body>
+</html>

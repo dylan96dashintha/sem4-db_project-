@@ -23,8 +23,23 @@ router.post('/',function(req,res){
             //console.log(uname,psw,emp_id); 
             if ( username == uname && pswd == psw && emp_id != null){
                 check = true;
-                res.redirect('/empProfile');
+                conn.query(`SELECT count(branch_manager.emp_id) AS counter FROM branch_manager,employee_login where branch_manager.emp_id = '${emp_id}' ` , function(err,result){
+                    if (err) {
+                        console.log(err);
+                    }else{
+                        if(result[0].counter == 0){
+
+                            res.redirect('/empProfile');
+                        }else{
+                            req.session.emp_id = emp_id
+                            res.redirect('/branchManagerProfile');
+
+                        }
+
+                    }
+                });
                 break;
+
             }else if(username == uname && pswd == psw && emp_id == null){
                 check = true;
                 req.session.username = username

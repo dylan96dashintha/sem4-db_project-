@@ -17,13 +17,15 @@ var createOrganizationalFormRouter = require('./routes/createOrganizationalForm'
 var normalLoanRequestRouter = require('./routes/normalLoanRequest');
 var onlineFDRouter = require('./routes/onlineFD');
 var loanInstallementRouter = require('./routes/loanInstallement');
-
+var branchManagerProfileRouter = require('./routes/branchManagerProfile');
 var onlineLoanRequestRouter = require('./routes/onlineLoanReq');
 var accountDetailsRouter = require('./routes/accountDetails');
 var depositMoneyRouter = require('./routes/depositMoney');
 var withdrawMoneyRouter = require('./routes/withdrawMoney');
 var moneyTransferRouter = require('./routes/moneyTransfer');
-
+var latePersonalLoanInstallementReportRouter = require('./routes/latePersonalLoanInstallementReport');
+var lateOrganizationalLoanInstallementReportRouter = require('./routes/lateOrganizationalLoanInstallementReport');
+var addEmpRouter = require('./routes/addEmp');
 var app = express();
 
 // view engine setup
@@ -59,6 +61,10 @@ app.use('/onlineFD' , onlineFDRouter);
 app.use('/onlineLoanReq' , onlineLoanRequestRouter);
 app.use('/loanInstallement' , loanInstallementRouter);
 app.use('/moneyTransfer',moneyTransferRouter);
+app.use('/branchManagerProfile' , branchManagerProfileRouter);
+app.use('/latePersonalLoanInstallementReport' , latePersonalLoanInstallementReportRouter);
+app.use('/lateOrganizationalLoanInstallementReport' , lateOrganizationalLoanInstallementReportRouter);
+app.use('/addEmp' , addEmpRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
