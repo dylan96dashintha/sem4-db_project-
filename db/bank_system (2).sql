@@ -1173,6 +1173,22 @@ END$$
 DELIMITER ;
 COMMIT;
 
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` EVENT `Account_Interest` ON SCHEDULE EVERY 1 MONTH STARTS '2019-01-01 00:05:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
+UPDATE interest SET interest_amount = (balance*0.12) , checked_date = CURRENT_DATE WHERE type='saving' and CURRENT_DATE - checked_date = 0 ;
+UPDATE interest SET interest_amount = (balance*0.12) checked_date = CURRENT_DATE where type='FD' and num_months='3' and CURRENT_DATE - checked_date = 0;
+UPDATE interest SET interest_amount = (balance*0.14) checked_date = CURRENT_DATE where type='FD' and num_months='6' and CURRENT_DATE - checked_date = 0;
+UPDATE interest SET interest_amount = (balance*0.16) checked_date = CURRENT_DATE where type='FD' and num_months='12' and CURRENT_DATE - checked_date = 0;
+    
+
+END$$
+
+DELIMITER ;
+COMMIT;
+
+
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

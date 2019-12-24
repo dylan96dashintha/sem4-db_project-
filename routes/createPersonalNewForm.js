@@ -30,6 +30,7 @@ router.post('/',function(req,res){
     let balance = parseFloat(req.body.balance);
     console.log(type);
     console.log(custId); 
+    
     function checkNic(){
         conn.query('SELECT count(nic) as count FROM person WHERE nic = ' + nic, (err,result) => {
             if (result[0].count == 0){
