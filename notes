@@ -1,8 +1,8 @@
 //views
 
-CREATE or REPLACE VIEW organization_details AS SELECT `reg_num`,`name`,`account_num`,`branch_id` FROM organization NATURAL JOIN account
 
 
 
-CREATE OR REPLACE VIEW person_details AS SELECT person.nic as nic, person.first_name as first_name, person.last_name as last_name, account.account_num as account_num, branch.region as branch_regon, branch.name as branch_name FROM person, account, branch where person.customer_id = account.customer_id and account.branch_id = branch.branch_id;
+CREATE OR REPLACE VIEW person_details AS SELECT person.nic as nic, person.first_name as first_name, person.last_name as last_name, account.account_num as account_num,account.balance as balance, branch.region as branch_regon, branch.name as branch_name FROM person, account, branch where person.customer_id = account.customer_id and account.branch_id = branch.branch_id;
 
+CREATE OR REPLACE VIEW organization_details AS SELECT organization.reg_num as reg_num, organization.name as name , account.account_num as account_num ,account.balance as balance, branch.region as branch_regon, branch.name as branch_name FROM organization, account, branch where organization.customer_id = account.customer_id and account.branch_id = branch.branch_id

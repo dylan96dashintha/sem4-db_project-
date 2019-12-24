@@ -28,8 +28,9 @@ router.post('/',function(req,res){
                         console.log(err);
                     }else{
                         if(result[0].counter == 0){
-
-                            res.redirect('/empProfile');
+                            req.session.logtype = "emp";
+                            req.session.username = uname;
+                            res.redirect('/customerAccount');
                         }else{
                             req.session.emp_id = emp_id
                             res.redirect('/branchManagerProfile');

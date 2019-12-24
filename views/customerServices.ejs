@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Customer Services</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
+    <link rel="stylesheet" href="../public/stylesheets/main2.css">
+
+</head>
+<body>
+    <nav class="navbar navbar-light bg-light static-top">
+        <div class="container">
+          <a class="navbar-brand" href="#">Emplyoee</a>
+          <a class="btn btn-primary" href="#">Log out</a>
+        </div>
+    </nav>
+    <div class="row">
+        <% if (accOwnerType == "personal"){%>
+        <!-- for personal account -->
+        <div class="card col-md-auto" style="width: 18rem;">
+            <div class="card-body">
+                <!-- acc No and acc type -->
+                <%if (accType == "currentAccount"){%>
+                <h5 class="card-title"><%=accNo+" (Current Account)"%></h5>
+                <%}else{%>
+                <h5 class="card-title"><%=accNo+" (Saving Account)"%></h5>
+                <%}%>  
+                <h6 class="card-subtitle mb-2 text-muted">Personal Account</h6>
+                <!-- acc holders name -->
+                <h6 class="card-subtitle mb-2 text-muted">Account Holder Name</h6>
+                <p class="card-text"><%=firstName+" "+lastName%></p>
+                <!-- branch name -->
+                <h6 class="card-subtitle mb-2 text-muted">Branch Name</h6>
+                <p class="card-text"><%=branchName%></p>
+                <!-- balance -->
+                <h6 class="card-subtitle mb-2 text-muted">Balance</h6>
+                <p class="card-text"><%=balance%></p>
+                <!-- transaction count -->
+                <%if (accType == "savingAccount"){%>
+                <h6 class="card-subtitle mb-2 text-muted">Transaction Count</h6>
+                <p class="card-text"><%=transactionCount%></p>
+                <%}%> 
+            </div>
+        </div>
+
+        <% }else if (accOwnerType == "organization") { %>
+        <!-- for organizations -->
+        <div class="card col-md-auto" style="width: 18rem;">
+            <div class="card-body">
+                <!-- acc No and acc type -->
+                <%if (accType == "currentAccount"){%>
+                <h5 class="card-title"><%=accNo+" (Current Account)"%></h5>
+                <%}else{%>
+                <h5 class="card-title"><%=accNo+" (Saving Account)"%></h5>
+                <%}%>  
+                <h6 class="card-subtitle mb-2 text-muted">Organizational Account</h6>
+                <!-- acc holders name -->
+                <h6 class="card-subtitle mb-2 text-muted">Organization Name</h6>
+                <p class="card-text"><%=name%></p>
+                <!-- branch name -->    
+                <h6 class="card-subtitle mb-2 text-muted">Branch Name</h6>
+                <p class="card-text"><%=branchName%></p>
+                <!-- balance -->
+                <h6 class="card-subtitle mb-2 text-muted">Balance</h6>
+                <p class="card-text"><%=balance%></p>
+                <!-- transaction count -->
+                <%if (accType == "savingAccount"){%>
+                <h6 class="card-subtitle mb-2 text-muted">Transaction Count</h6>
+                <p class="card-text"><%=transactionCount%></p>
+                <%}%> 
+            </div>
+            </div>
+        <% }%>
+        
+        <div class="col-md-8">
+            <div class="row">
+                <!-- <div class="col-md-2">
+                    <a class="btn btn-primary" href="depositMoney" type="button">Deposit</a>
+                </div>
+                <div class="col-md-2">
+                    <a class="btn btn-primary" href="widrawMoney" type="button">Withdraw</a>
+                </div>
+                <div class="col-md-2">
+                    <a class="btn btn-primary" href="loanRequest" type="button">Loan</a>
+                </div> -->
+                <div class="col-md-2">
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#depositDiv" aria-expanded="false" aria-controls="collapseExample">
+                        Deposit Money
+                    </button>
+                </div>  
+
+                <div class="col-md-2">
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#withdrawDiv" aria-expanded="false" aria-controls="collapseExample">
+                        Withdraw Money
+                    </button>
+                </div>
+                <!-- <div class="row"> -->
+                    <!-- deposit collaps -->
+                    <div class="collapse" id="depositDiv">
+                        <form action="depositMoney" method="post">
+                            <div class="form-group">
+                            <label for="">Amount :</label>
+                            <input type="text" class="form-control" name="ammount" id="" aria-describedby="helpId" placeholder="Amount to Doeposit">
+                            <input type="hidden" name="accNo" value="<%=accNo%>">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Deposit</button>
+                        </form>
+                    </div>
+                    <!-- withdraw collape -->
+                    <div class="collapse" id="withdrawDiv">
+                        <form action="withdrawMoney" method="post">
+                            <div class="form-group">
+                            <label for="">Amount :</label>
+                            <input type="text" class="form-control" name="ammount" id="" aria-describedby="helpId" placeholder="Amount to Withdraw">
+                            <input type="hidden" name="accNo" value="<%=accNo%>">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Withdraw</button>
+                        </form>
+                    </div>
+                <!-- </div> -->
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+</body>
+</html>

@@ -26,6 +26,7 @@ var moneyTransferRouter = require('./routes/moneyTransfer');
 var latePersonalLoanInstallementReportRouter = require('./routes/latePersonalLoanInstallementReport');
 var lateOrganizationalLoanInstallementReportRouter = require('./routes/lateOrganizationalLoanInstallementReport');
 var addEmpRouter = require('./routes/addEmp');
+var customerAccountRouter = require('./routes/customerAccount');
 var app = express();
 
 // view engine setup
@@ -65,6 +66,8 @@ app.use('/branchManagerProfile' , branchManagerProfileRouter);
 app.use('/latePersonalLoanInstallementReport' , latePersonalLoanInstallementReportRouter);
 app.use('/lateOrganizationalLoanInstallementReport' , lateOrganizationalLoanInstallementReportRouter);
 app.use('/addEmp' , addEmpRouter);
+app.use('/customerAccount',customerAccountRouter);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
