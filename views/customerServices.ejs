@@ -14,6 +14,10 @@
     <nav class="navbar navbar-light bg-light static-top">
         <div class="container">
           <a class="navbar-brand" href="#">Emplyoee</a>
+          <%if (msg != null){%>
+          <p class="success"><%=msg%></p>
+          <%}   %>
+          <a class="btn btn-primary" href="customerAccount">Change Account</a>
           <a class="btn btn-primary" href="#">Log out</a>
         </div>
     </nav>
@@ -103,7 +107,7 @@
                         <form action="depositMoney" method="post">
                             <div class="form-group">
                             <label for="">Amount :</label>
-                            <input type="text" class="form-control" name="ammount" id="" aria-describedby="helpId" placeholder="Amount to Doeposit">
+                            <input type="text" class="form-control" name="amount" id="" aria-describedby="helpId" placeholder="Amount to Doeposit">
                             <input type="hidden" name="accNo" value="<%=accNo%>">
                             </div>
                             <button type="submit" class="btn btn-primary">Deposit</button>
@@ -114,7 +118,7 @@
                         <form action="withdrawMoney" method="post">
                             <div class="form-group">
                             <label for="">Amount :</label>
-                            <input type="text" class="form-control" name="ammount" id="" aria-describedby="helpId" placeholder="Amount to Withdraw">
+                            <input type="text" class="form-control" name="amount" id="" aria-describedby="helpId" placeholder="Amount to Withdraw">
                             <input type="hidden" name="accNo" value="<%=accNo%>">
                             </div>
                             <button type="submit" class="btn btn-primary">Withdraw</button>

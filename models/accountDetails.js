@@ -35,12 +35,12 @@ function isPersonalOrOrganization(accNo,callback){
      var details ={};
     conn.query(`SELECT * FROM person_details WHERE account_num = ${accNo}`,function(err,result){
         if(result.length == 1){
-            details = {accOwnerType: "personal" , nic: result[0].nic, firstName: result[0].first_name, lastName: result[0].last_name, accNo: result[0].account_num, branchName:result[0].branch_name, balance: result[0].balance};
+            details = {msg:null,accOwnerType: "personal" , nic: result[0].nic, firstName: result[0].first_name, lastName: result[0].last_name, accNo: result[0].account_num, branchName:result[0].branch_name, balance: result[0].balance};
             callback(null,details);
         }else{
             conn.query(`SELECT * FROM organization_details WHERE account_num = ${accNo}`,function(err,result){
                 if(result.length == 1){
-                    details = {accOwnerType: "organization" , regNo: result[0].reg_num, name: result[0].name, accNo: result[0].account_num, branchName:result[0].branch_name, balance: result[0].balance};
+                    details = {msg:null,accOwnerType: "organization" , regNo: result[0].reg_num, name: result[0].name, accNo: result[0].account_num, branchName:result[0].branch_name, balance: result[0].balance};
                     callback(null,details);
                 }else{
                     callback(null, {accOwnerType: null , accType: null})

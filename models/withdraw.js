@@ -53,7 +53,9 @@ function changeBalance(accNo,amount,type,count,callback){
     conn.query(`SELECT balance FROM ${type} WHERE account_num =` + accNo,function(err,result){
         if(err){console.log("err in find balance");}
         var currentBalance = result[0].balance;
-        var newBalance = parseFloat(currentBalance)-parseFloat(amount);     
+        console.log(currentBalance);    
+        var newBalance = parseFloat(currentBalance)-parseFloat(amount); 
+        console.log(amount);    
         if(newBalance < 0){
             callback(null, "nobalance");
         }else if (type == "saving_account"){
@@ -75,7 +77,7 @@ function changeBalance(accNo,amount,type,count,callback){
 }
 
 //withdraw money from any type of account
-function withdraw(accNo, amount, callback){
+function withdraw(accNo, amount, transactionType, callback){
 
     // check();
     var d = new Date();
@@ -92,7 +94,7 @@ function withdraw(accNo, amount, callback){
   
     conn.beginTransaction(function(err){
         if(err) throw err;
-        conn.query(`INSERT INTO transaction (transaction_id,date,time_transaction,account_num) VALUES ('${transID}','${date}','${time}','${accNo}')`,function(err,result) {
+        conn.query(`INSERT INTO transaction (transaction_id,date,time_transaction,transaction_type,account_num) VALUES ('${transID}','${date}','${time}','${transactionType}','${accNo}')`,function(err,result) {
             if(err){
                 conn.rollback(function(err){
                     callback(err,"Error in update DB");
@@ -168,7 +170,7 @@ function withdraw(accNo, amount, callback){
                         
                     }else if(result == "current"){
                         
-                        console.log("current"); 
+                        console.log("current45"); 
                         changeBalance(accNo,amount,'current_account',result,function(err,result){
                             if(result == "success"){
                                 conn.commit(function(err) {
@@ -223,7 +225,7 @@ function withdraw(accNo, amount, callback){
 
                         conn.rollback(function(err) {
                             // console.error(err);
-                            callback(null,"err");
+                            callback(null,"err345");
                         });
                         conn.commit(function(err) {
                             if(err){
