@@ -15,7 +15,7 @@
 
 <style>
   body {
-    background-color: rgba(15, 15, 15, 1.0);
+    background-color: rgba(255, 255, 2555, 1.0);
     
     background-image: url("https://www.transparenttextures.com/patterns/always-grey.png");
   }  
@@ -24,25 +24,30 @@
 
 <body>
     <div class="container">
+        <form action="createOrganizationalExistAccount" method="post" class="was-validated">
+          <div class = "form-group">
+            <label for="accountType">Choose Account Type:<br>
+              <input type = "radio"   name="type" value="true">Saving Account 
+              <input type = "radio"  name="type" value="false">Current Account <br>
+            </label>
+          </div>
 
-        <form action="accountDetails" method="post" class="was-validated">    
           <div class="form-group">
-            <label for="nic">Nic:</label>
-            <input type="text" class="form-control" id="nic" placeholder="Enter Nic" name="nic" required>
+            <label for="balance">Account Balance:</label>
+            <input type="number" class="form-control" id="balance" placeholder="Enter Account Balance:" name="balance" required>
             <div class="valid-feedback">Valid.</div>
             <div class="invalid-feedback">Please fill out this field.</div>
           </div>
- 
-             
+
           <div class="form-group">
-            <label for="actNum">Account Number:</label>
-            <input type="text" class="form-control" id="actNum" placeholder="Enter Account Number" name="actNum" required>
+            <label for="branchId">Branch Id:</label>
+            <input type="text" class="form-control" id="branchId" placeholder="Enter Branch Id" name="branchId" required>
             <div class="valid-feedback">Valid.</div>
             <div class="invalid-feedback">Please fill out this field.</div>
           </div>
-       
-          
+
           <button type="submit" class="btn btn-primary">Submit</button>
+        
         </form>
       </div>
       

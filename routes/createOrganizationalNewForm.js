@@ -4,35 +4,32 @@ var conn = require('./connection');
 var customId = require('./generateCustomId');
 var accountId = require('./generateAccountId');
 router.get('/',function(req,res,next){
-    res.render('createPersonalNewForm');
+    res.render('createOrganizationalNewForm');
 
 });
 
 router.post('/',function(req,res){
-    let nic = req.session.nic;
-    console.log(nic);
-    let firstName = req.body.firstName;
-    let lastName = req.body.lastName;
-    let surname = req.body.surname;
-    let streetNum = req.body.streetNum;
-    let street = req.body.street;
-    let city = req.body.city;
-    let dob = req.body.dob;
-    let contactNum = req.body.contactNum;
-    let email = req.body.email;
-    //let nic = req.body.nic;
+    let reg_num = req.session.reg_num;
+    console.log(reg_num);
+    let name = req.body.name;
+    let dos = req.body.dos;
     let uname = req.body.uname;
     let psw = req.body.psw;
     let branchId = req.body.branchId;
-    let custId = customId();
+    let streetNum = req.body.streetNum;
+    let street = req.body.street;
+    let city = req.body.city;
+    let contactNum = req.body.contactNum;
+    let email = req.body.email;
+    let custId = customId();    
     let actId = accountId();
     let type = req.body.type;
     let balance = parseFloat(req.body.balance);
     console.log(type);
-    console.log(custId); 
-    
-    function checkNic(){
-        conn.query('SELECT count(nic) as count FROM person WHERE nic = ' + nic, (err,result) => {
+    console.log(custId);
+
+    function checkRegNum(){
+        conn.query('SELECT count(reg_num) as count FROM organization WHERE reg_num = ' + reg_num, (err,result) => {
             if (result[0].count == 0){
                 checkCustomId();
             }else {
@@ -76,9 +73,8 @@ router.post('/',function(req,res){
         
     }
 
-    function updateDb(){
+    function updateDb(){    
     
-    // console.log(`INSERT INTO customer(customer_id,branch_id) VALUES (${custId},${branchId})`);
         conn.query(`INSERT INTO customer(customer_id,branch_id) VALUES ('${custId}','${branchId}')`,function(err,result){
             if (err) {
                 res.send("Error in updating customer table");
@@ -88,9 +84,9 @@ router.post('/',function(req,res){
                         console.log(err);
                         res.send("Error in updating login table");
                     }else{
-                        conn.query(`INSERT INTO  person(nic,first_name,last_name,surname,street_num,street,city,dob,contact_num,email_address,customer_id) VALUES ('${nic}','${firstName}','${lastName}','${surname}','${streetNum}','${street}','${city}','${dob}','${contactNum}','${email}','${custId}')`,function(err,result){
+                        conn.query(`INSERT INTO  organization(reg_num,name,start_date,street_num,street,city,contact_num,email_address,customer_id) VALUES ('${regNum}','${name}','${dos}','${streetNum}','${street}','${city}','${contactNum}','${email}','${custId}')`,function(err,result){
                             if (err) {
-                                res.send("err in updatin person table");
+                                res.send("err in updatin Organization table");
                             }else{
                                 conn.query(`INSERT INTO customer_login(username,customer_id) VALUES ('${uname}','${custId}')`,function(err,result){
                                     if(err){
@@ -142,7 +138,7 @@ router.post('/',function(req,res){
 
     }
             
-checkNic();
+checkRegNum();
 });
 
 module.exports = router;

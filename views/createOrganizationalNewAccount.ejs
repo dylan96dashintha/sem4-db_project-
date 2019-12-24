@@ -15,7 +15,7 @@
 
 <style>
   body {
-    background-color: rgba(15, 15, 15, 1.0);
+    background-color: rgba(255, 255, 2555, 1.0);
     
     background-image: url("https://www.transparenttextures.com/patterns/always-grey.png");
   }  
@@ -24,25 +24,18 @@
 
 <body>
     <div class="container">
-
-        <form action="accountDetails" method="post" class="was-validated">    
-          <div class="form-group">
-            <label for="nic">Nic:</label>
-            <input type="text" class="form-control" id="nic" placeholder="Enter Nic" name="nic" required>
-            <div class="valid-feedback">Valid.</div>
-            <div class="invalid-feedback">Please fill out this field.</div>
-          </div>
  
-             
+        <form action="createOrganizationalNewAccount" method="post" class="was-validated">
           <div class="form-group">
-            <label for="actNum">Account Number:</label>
-            <input type="text" class="form-control" id="actNum" placeholder="Enter Account Number" name="actNum" required>
+            <label for="reg_num">Register Number:</label>
+            <input type="text" class="form-control" regNum="reg_num" placeholder="Enter Register Number" name="reg_num" required>
             <div class="valid-feedback">Valid.</div>
             <div class="invalid-feedback">Please fill out this field.</div>
           </div>
-       
+
           
           <button type="submit" class="btn btn-primary">Submit</button>
+        
         </form>
       </div>
       
