@@ -13,11 +13,9 @@ router.post('/',function(req,res){
    console.log(account_num);
 
 });
-   var account_num="4789";
-   conn.connect(function(err){
-    if (err) throw err;
+   
     console.log("Database connected successfully!");
-    var transaction_query = `SELECT transaction_id,amount,account,date,time_transaction FROM transaction right outer join online_transaction using(transaction_id) where account_num =${account_num}`;
+    var transaction_query = `SELECT transaction_id,amount,account,date,time_transaction FROM transaction right outer join online_transaction using(transaction_id) `;
     conn.query(transaction_query,function(err,result){
     if (err) throw error;
         
@@ -33,7 +31,7 @@ router.post('/',function(req,res){
   
     });
 
-    });
+
 
 
     module.exports=router
