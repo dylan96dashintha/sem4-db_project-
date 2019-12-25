@@ -29,8 +29,6 @@ router.get('/', function (req, res, next) {
         accountList.push(response[x].account,);
         amountList.push(response[x].amount);
 
-       
-        
         
     }
         res.render('onlineTransfer',{tranc_id : transactionIdList,acc_num:accountNumList, date :dateList , time :timeList, acc : accountList ,  amm :amountList });
