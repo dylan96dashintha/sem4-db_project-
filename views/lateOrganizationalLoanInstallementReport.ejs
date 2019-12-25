@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <title>profile</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <style>
+  .tab{
+    align-content: center;
+  }
+
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    align-content: center;
+  }
+  </style>
+  
+  <body>
+    <h1 style="text-align: center;">Organizational Late Loan Installement Report</h1>
+    <div id="tab">
+      <table>
+  
+        <tr>
+          <th>Register Number</th>
+          <th>Organizational ID</th>
+          <th>Account Number</th>
+          <th>Name</th>
+          <th>Contact Number</th>
+          <th>Email Address</th>
+        </tr>
+
+        <% for(var i=0; i < name.length; i++) { %>
+           <tr>
+             <td><%= regNum[i] %></td>
+             <td><%= customNum[i] %></td>
+             <td><%= account[i] %></td>
+             <td><%= name[i] %></td>
+             <td><%= tel[i] %></td>
+             <td><%= email[i] %></td>
+             
+           </tr>
+        <% } %>
+        </table>
+      
+
+    </div>
+      
+  </body>
+</html>

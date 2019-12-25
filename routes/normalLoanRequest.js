@@ -20,6 +20,8 @@ router.post('/', function (req, res) {
     let empType = req.body.empType;
     let profession = req.body.profession;
     let annualSalary = req.body.annualSalary;
+    let installement_amt = (loanAmount*0.1)/repayPeriod;
+    console.log("dsds"+installement_amt);
     //let loanId = loan_Id();
     //let transactionId = transaction_Id();
 
@@ -27,7 +29,7 @@ router.post('/', function (req, res) {
 
         conn.beginTransaction(function(err){
             if (err) { throw err; }
-            conn.query(`INSERT INTO loan(loan_id,loan_amount,repayment_period,start_date,state,account_num) VALUES ('${loanId}','${loanAmount}','${repayPeriod}',curdate(),'1','${actNum}')`, function (err, result) {
+            conn.query(`INSERT INTO loan(loan_id,loan_amount,installement_amount,repayment_period,start_date,state,account_num) VALUES ('${loanId}','${loanAmount}','${installement_amt}','${repayPeriod}',curdate(),'1','${actNum}')`, function (err, result) {
                 if (err) {
                     conn.rollback(function(err){
                         res.send(err);
@@ -43,7 +45,7 @@ router.post('/', function (req, res) {
                     
                     }
 
-                    conn.query(`INSERT INTO transaction(transaction_id,date,time_transaction,account_num) VALUES ('${transId}',curdate(),curtime(),'${actNum}')`, function (err, result) {
+                    conn.query(`INSERT INTO transaction(transaction_id,date,time_transaction,transaction_type,account_num) VALUES ('${transId}',curdate(),curtime(),'loan','${actNum}')`, function (err, result) {
                         if (err) {
                             conn.rollback(function(err){
                                 res.send("unsuccessful in updating transaction entity");
@@ -64,18 +66,26 @@ router.post('/', function (req, res) {
                                         res.send("unsuccessful in updating balance column entity");
                                     });
                                 }
-
-                                conn.commit(function(err) {
-                                    if (err) { 
-                                      conn.rollback(function() {
-                                        throw err;
-                                      });
+                                conn.query(`INSERT INTO installement(loan_id,installement_amount,checked_date,net_loan_amount) VALUES('${loanId}' , ${installement_amt} , curdate() , ${loanAmount})` , function(err,result){
+                                    if(err) {
+                                        conn.rollback(function(err){
+                                            res.send("unsuccessfull in installement...");
+                                        });
                                     }
-                                    res.send("successfully updated");
-                                    console.log('Transaction Complete.');
-                                    conn.end();
-                                  });
+                                    conn.commit(function(err) {
+                                        if (err) { 
+                                          conn.rollback(function() {
+                                            throw err;
+                                          });
+                                        }
+                                        res.send("successfully updated");
+                                        console.log('Transaction Complete.');
+                                        conn.end();
+                                      });
+    
+                                });
 
+                                
                             });
 
                         });
@@ -97,10 +107,17 @@ router.post('/', function (req, res) {
 
     function checkAccountNum() {
         conn.query(`SELECT account_num FROM account WHERE account_num = '${actNum}'`, function (err, result) {
-            if (result.length != 0) {
-                updateDB();
-            } else {
-                res.send("fucker");
+            if (err){
+                console.log(err);
+            }else{
+                if (result.length == 1) {
+                    updateDB();
+                    //res.send("correct");
+                    console.log(result);
+                } else {
+                    
+                    res.send("fucker");
+                }
             }
         });
     }
