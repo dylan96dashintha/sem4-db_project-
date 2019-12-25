@@ -20,7 +20,7 @@ router.get('/', function (req, res, next) {
     if (err) throw error;
 
     const response = JSON.parse(JSON.stringify(result));  
-    console.log(response)  
+ 
     for(x=0 ; x<response.length ; x++){
         transactionIdList.push(response[x].transaction_id);
         accountNumList.push(response[x].account_num,);
