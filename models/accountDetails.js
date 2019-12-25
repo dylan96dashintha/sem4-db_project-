@@ -3,9 +3,9 @@ var mysql = require('mysql');
 
 
 function getAccDetails(accNo,callback){
-    console.log("sddddd");
+    // console.log("sddddd");
     conn.query(`SELECT COUNT(account_num) AS count FROM current_account WHERE account_num = `+ accNo, function(err,result){
-        console.log(result[0].count);
+        // console.log(result[0].count);
         if(result[0].count == 1){
             isPersonalOrOrganization(accNo,function(err,result){
                 result.accType = "currentAccount";
@@ -31,6 +31,35 @@ function getAccDetails(accNo,callback){
     });
 }
 
+function getAccDetails2(accNo){
+    // console.log("sddddd");
+    conn.query(`SELECT COUNT(account_num) AS count FROM current_account WHERE account_num = `+ accNo, function(err,result){
+        // console.log(result[0].count);
+        if(result[0].count == 1){
+            isPersonalOrOrganization(accNo,function(err,result){
+                result.accType = "currentAccount";
+                // console.log("aaaaaaaaaa");
+                return result;
+            });
+        }
+        else{
+            conn.query(`SELECT COUNT(account_num) AS count , transaction_count FROM saving_account WHERE account_num = `+ accNo, function(err,result){
+                if(result[0].count == 1){ 
+                    var tCount = result[0].transaction_count;
+                    isPersonalOrOrganization(accNo,function(err,result){
+                        result.transactionCount = tCount;
+                        result.accType = "savingAccount";
+                        return result;
+                    });
+                }
+                else{
+                    return {accOwnerType: null , accType: null};
+                }
+            });
+        }
+    });
+}
+
 function isPersonalOrOrganization(accNo,callback){   
      var details ={};
     conn.query(`SELECT * FROM person_details WHERE account_num = ${accNo}`,function(err,result){
@@ -50,6 +79,24 @@ function isPersonalOrOrganization(accNo,callback){
     });
 }
 
+function isSavingOrCurrent(accNo,callback){
+
+    conn.query(`SELECT COUNT(account_num) as count , transaction_count FROM saving_account WHERE account_num ='${accNo}'`,function(err,result){
+        if(err){console.error(err);}
+        else if(result[0].count == 1){
+            callback(null,result[0].transaction_count);
+        }else{
+            conn.query(`SELECT COUNT(account_num) as count FROM current_account WHERE account_num ='${accNo}'`,function(err,result){
+                if(err){console.error(err);}
+                else if(result[0].count == 1){
+                    callback(null,"current");
+                }else{callback(true,null);}
+            });
+        }   
+        
+    });
+}
+
 /** input accNo, accHoldersName, and branch
  * dan brach id ekata hada tyenne
  * branch name ekat hdanna oone
@@ -59,8 +106,8 @@ function isPersonalOrOrganization(accNo,callback){
 function checkAccDetails(accNo, accHoldername, branchName,callback){
 
     getAccDetails(accNo,function(err,result){
-        console.log(result);
-        if(result.accOwnerType == "person"){
+        // console.log(result);
+        if(result.accOwnerType == "personal"){
             if((accHoldername == result.firstName || accHoldername == result.lastName) && branchName == result.branchName  ){ //brach id sholld be branch
                 callback(null, true);
             }else{
@@ -77,4 +124,67 @@ function checkAccDetails(accNo, accHoldername, branchName,callback){
 
 }
 
-module.exports = {getAccDetails,checkAccDetails};
+function getAccounts(username,callback){
+    //this function returns the all the accounts thah customer has
+    //should input the username 
+    var details = [];
+    conn.query(`SELECT * FROM customer_login NATURAL JOIN person_details WHERE username = '${username}'`,async function(err,result){
+        if(err){console.error(err)}
+        else if(result.length > 0){            
+            result.forEach(element => {
+                details.push({accNo:element.account_num,balance:element.balance,branch:element.branch_name,state:element.state});
+            });
+            callback(null,details);
+            
+        }else{
+            conn.query(`SELECT * FROM customer_login NATURAL JOIN organization_details WHERE username = '${username}'`,function(err,result){
+                if(err){console.error(err)}
+                else if(result.length > 0){
+                    result.forEach(element => {
+                        details.push({accNo:element.account_num,balance:element.balance,branch:element.branch_name,state:element.state});
+                    });
+                    callback(null,details);
+                }else{
+                    callback(null,false);
+                }
+
+            });
+        }
+    });
+
+}
+
+async function getMultipleAccDetails(accNumbers){
+    // console.log(accNumbers);
+    let accNums = accNumbers;
+    const balances = [];
+    const branches = [];
+    const accTypes = [];
+    const transactionCounts = [];
+    // add().then(console.log(transactionCounts));
+    // async function add(){
+        //  for(let i=0;i<accNums.length;i++){
+         for(const item of accNums){
+            console.log(item);
+
+            await add(item).then(console.log("sd"));
+            
+        }
+        console.log(balances);
+
+        async function add(accNo){
+            await getAccDetails(accNo,function(err,result){
+                console.log("djdedjewoejijwfindn");
+                balances.push(result.balance);
+            });
+        }
+        // console.log(balances);
+    
+    // add().then(console.log(transactionCounts));
+    // callback(null,{accNo:accNums,balance:balances,branch:branches,accType:accTypes,transactionCount:transactionCounts})
+    // return {accNo:accNums,balance:balances,branch:branches,accType:accTypes,transactionCount:transactionCounts};
+
+
+}
+
+module.exports = {getAccDetails,checkAccDetails,getAccounts,getMultipleAccDetails};

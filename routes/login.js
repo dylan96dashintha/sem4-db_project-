@@ -53,7 +53,7 @@ router.post('/',function(req,res){
                 check = true;
                 req.session.username = username
                 req.session.logtype = "customer";
-                res.redirect('/customProfile');
+                res.redirect('customProfile');
                 break;
             }
          }
