@@ -8,7 +8,7 @@ router.get('/', function (req, res, next) {
 });
 
 
- console.log("Database connected successfully!");
+ //console.log("Database connected successfully!");
  var atmwithdraw_query = `SELECT transaction_id,atm_id,account_num,date,time_transaction FROM transaction right outer join atm_withdraw using(transaction_id) `;
 
  conn.query(atmwithdraw_query,function(err,result){
@@ -21,7 +21,7 @@ router.get('/', function (req, res, next) {
      var account_num=response[x].account_num;
      var date=response[x].date;
      var time_transaction=response[x].time_transaction;
-     console.log(transaction_id,atm_id,account_num,date,time_transaction);
+     //console.log(transaction_id,atm_id,account_num,date,time_transaction);
      
      }
 

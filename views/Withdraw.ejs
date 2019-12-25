@@ -16,7 +16,43 @@
     
     background-image: url("https://www.transparenttextures.com/patterns/always-grey.png");
   }  
-    </style>
+   .tab{
+    align-content: center;
+  }
+
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    align-content: center;
+  } 
+  </style>
+    
     <body>
         <h1>Withdraw</h1>
+         <div id=tab>
+            <table>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Account Number</th>
+                    <th>Withdraw Amount</th>
+                    
+                  </tr>
+                  <% for(var i=0; i <5; i++) { %>
+                    <tr>
+                      <td><%= tranc_id[i] %></td>
+                      <td><%= date[i] %></td>
+                      <td><%= time[i] %></td>
+                      <td><%= acc_num[i] %></td>
+                      <td><%=with_amm[i] %></td>
+                      
+                      
+                    </tr>
+                 <% } %>
+                   
+             </table>
+            </div> 
+
     </body>
+    </html>

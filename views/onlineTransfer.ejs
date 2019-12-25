@@ -16,19 +16,44 @@
     
     background-image: url("https://www.transparenttextures.com/patterns/always-grey.png");
   }  
+  .tab{
+    align-content: center;
+  }
+
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    align-content: center;
+  } 
     </style>
     <body>
-        <h1>Online Transfer</h1>
-        <form>
-        <div class="form-group">
-            <label for="account_num">Account Number:</label>
-            <input type="text" class="form-control" id="account_num" placeholder="Enter Account Number" name="account_num" required>
-            <div class="valid-feedback">Valid.</div>
-            <div class="invalid-feedback">Please fill out this field.</div>
-          </div>
-
-          <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
+        <h1 style= "text-align:center;">Online Transfer</h1>
+        <div id=tab>
+            <table>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Account Number</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Account</th>
+                    <th>Amount</th>
+                    
+                  </tr>
+                  <% for(var i=0; i <5; i++) { %>
+                    <tr>
+                      <td><%= tranc_id[i] %></td>
+                      <td><%= acc_num[i] %></td>
+                      <td><%= date[i] %></td>
+                      <td><%= time[i] %></td>
+                      <td><%= acc[i] %></td>
+                      <td><%=amm[i] %></td>
+                      
+                      
+                    </tr>
+                 <% } %>
+                   
+             </table>
+            </div> 
           
 
     </body>

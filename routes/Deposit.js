@@ -7,7 +7,7 @@ router.get('/', function (req, res, next) {
     res.render('Deposit');
 });
 
-console.log("Database connected successfully!");
+//console.log("Database connected successfully!");
  var deposit_query = `SELECT transaction_id,deposit_amount,account_num,date,time_transaction FROM transaction right outer join deposit using(transaction_id) `;
  
  conn.query(deposit_query,function(err,result){
@@ -20,7 +20,7 @@ console.log("Database connected successfully!");
      var account_num=response[x].account_num;
      var date=response[x].date;
      var time_transaction=response[x].time_transaction;
-     console.log(transaction_id,deposit_amount,account_num,date,time_transaction);
+     //console.log(transaction_id,deposit_amount,account_num,date,time_transaction);
      
      }
 

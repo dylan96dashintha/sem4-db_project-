@@ -4,34 +4,40 @@ var conn = require('./connection');
 
 
 router.get('/', function (req, res, next) {
-    res.render('onlineTransfer');
-});
+    
+    var transactionIdList = []  ;
+    var accountNumList = [];
+    var dateList = [];
+    var timeList = [];
+    var accountList = [];
+    var amountList = [];
 
-router.post('/',function(req,res){
-    console.log("hi");
-   let account_num=req.body.account_num;
-   console.log(account_num);
 
-});
    
-    console.log("Database connected successfully!");
-    var transaction_query = `SELECT transaction_id,amount,account,date,time_transaction FROM transaction right outer join online_transaction using(transaction_id) `;
+    var transaction_query = `SELECT transaction_id,account_num,date,time_transaction,account,amount FROM transaction right outer join online_transaction using(transaction_id) `;
     conn.query(transaction_query,function(err,result){
+    
     if (err) throw error;
+
+    const response = JSON.parse(JSON.stringify(result));  
+    console.log(response)  
+    for(x=0 ; x<response.length ; x++){
+        transactionIdList.push(response[x].transaction_id);
+        accountNumList.push(response[x].account_num,);
+        dateList.push(response[x].date);
+        timeList.push(response[x].time_transaction);
+        accountList.push(response[x].account,);
+        amountList.push(response[x].amount);
+
+       
         
-        const response = JSON.parse(JSON.stringify(result));
-        for(x=0;x<response.length;x++){
-        var transaction_id= response[x].transaction_id;
-        var amount=response[x].amount;
-        var account=response[x].account;
-        var date=response[x].date;
-        var time_transaction=response[x].time_transaction;
-        console.log(transaction_id,amount,account,date,time_transaction);
-        }
-  
+        
+    }
+        res.render('onlineTransfer',{tranc_id : transactionIdList,acc_num:accountNumList, date :dateList , time :timeList, acc : accountList ,  amm :amountList });
+    
     });
 
-
+});
 
 
     module.exports=router
