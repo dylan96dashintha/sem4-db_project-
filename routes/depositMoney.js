@@ -8,7 +8,7 @@ var accDetails = require('../models/accountDetails').getAccDetails;
 var accountNumber ;
 
 router.get('/',function(req,res,next){
-    
+    res.render('depositMoney');
 });
 
 router.post('/',function(req,res){

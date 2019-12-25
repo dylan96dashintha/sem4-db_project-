@@ -21,6 +21,13 @@ var onlineFDRouter = require('./routes/onlineFD');
 var loanInstallementRouter = require('./routes/loanInstallement');
 var branchManagerProfileRouter = require('./routes/branchManagerProfile');
 var onlineLoanRequestRouter = require('./routes/onlineLoanReq');
+//<<<<<<< HEAD
+var transactionRouter=require('./routes/transaction');
+var onlineTransferRouter=require('./routes/onlineTransfer');
+var atmWithdrawRouter=require('./routes/AtmWithdraw');
+var depositRouter=require('./routes/Deposit');
+var withdrawRouter=require('./routes/Withdraw');
+//=======
 var accountDetailsRouter = require('./routes/accountDetails');
 var depositMoneyRouter = require('./routes/depositMoney');
 var withdrawMoneyRouter = require('./routes/withdrawMoney');
@@ -30,6 +37,7 @@ var lateOrganizationalLoanInstallementReportRouter = require('./routes/lateOrgan
 var addEmpRouter = require('./routes/addEmp');
 var customerAccountRouter = require('./routes/customerAccount');
 var customerAccountOnlineRouter = require('./routes/customerAccountOnline');
+//>>>>>>> bf1d718e7f9250267f1910a017c05ac281eccb40
 var app = express();
 
 // view engine setup
@@ -60,6 +68,13 @@ app.use('/createOrganizationalNewAccount', createOrganizationalNewAccountRouter)
 app.use('/createOrganizationalExistAccount', createOrganizationalExistAccountRouter);
 app.use('/normalLoanRequest', normalLoanRequestRouter);
 app.use('/onlineLoanReq',onlineLoanRequestRouter);
+//<<<<<<< HEAD
+app.use('/transaction',transactionRouter);
+app.use('/onlinetransfer',onlineTransferRouter);
+app.use('/atmwithdraw',atmWithdrawRouter);
+app.use('/deposit',depositRouter);
+app.use('/withdraw',withdrawRouter);
+//=======
 app.use('/accountDetails',accountDetailsRouter);
 app.use('/depositMoney',depositMoneyRouter);
 app.use('/withdrawMoney',withdrawMoneyRouter);
@@ -74,6 +89,7 @@ app.use('/addEmp' , addEmpRouter);
 app.use('/customerAccount',customerAccountRouter);
 app.use('/customerAccountOnline',customerAccountOnlineRouter)
 
+//>>>>>>> bf1d718e7f9250267f1910a017c05ac281eccb40
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
