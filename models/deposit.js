@@ -55,7 +55,7 @@ function changeBalance(accNo,amount,type,callback){
     });
 }
 
-function deposit(accNo, amount, callback){
+function deposit(accNo, amount,transactionType, callback){
     // check();
     var d = new Date();
     var date = d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate();
@@ -81,7 +81,7 @@ function deposit(accNo, amount, callback){
 
     conn.beginTransaction(function(err){
         if(err) console.error(err);
-        conn.query(`INSERT INTO transaction (transaction_id,date,time_transaction,account_num) VALUES ('${transID}','${date}','${time}','${accNo}')`,function(err,result) {
+        conn.query(`INSERT INTO transaction (transaction_id,date,time_transaction,transaction_type,account_num) VALUES ('${transID}','${date}','${time}','${transactionType}','${accNo}')`,function(err,result) {
             if(err){
                 conn.rollback(function(err){
                     callback(err,"Error in update DB");
