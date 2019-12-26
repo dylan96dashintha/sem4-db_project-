@@ -21,9 +21,9 @@ function moneyTransfer(transferingAcc,transferedAcc,amount,callback){
     var time = d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
    
 
-    withdrawMoney(transferingAcc,amount,function(err,result){
+    withdrawMoney(transferingAcc,amount,"ONLINE-MONEY-TRANSFER",function(err,result){
         if(result == "success"){
-            depositMoney(transferedAcc,amount,function(err,result){
+            depositMoney(transferedAcc,amount,"ONLINE-MONEY-RECEIVE",function(err,result){
                 if(result == "currentSuccess" || result == "savingSuccess"){
                     conn.query(`INSERT INTO money_transfer (transfer_id, transfered_acc, transfering_acc, date, time, amount) VALUES ('${transferId}','${transferedAcc}','${transferingAcc}','${date}','${time}','${amount}')`,function(err,result){
                         if(err){

@@ -36,7 +36,11 @@ var latePersonalLoanInstallementReportRouter = require('./routes/latePersonalLoa
 var lateOrganizationalLoanInstallementReportRouter = require('./routes/lateOrganizationalLoanInstallementReport');
 var addEmpRouter = require('./routes/addEmp');
 var customerAccountRouter = require('./routes/customerAccount');
+//<<<<<<< HEAD
 var closeAccountRouter= require('./routes/closeAccount');
+//=======
+var customerAccountOnlineRouter = require('./routes/customerAccountOnline');
+//>>>>>>> 42b4b5eaaa99283873975fcea4dbe69ed617f02e
 //>>>>>>> bf1d718e7f9250267f1910a017c05ac281eccb40
 var app = express();
 
@@ -87,7 +91,12 @@ app.use('/latePersonalLoanInstallementReport' , latePersonalLoanInstallementRepo
 app.use('/lateOrganizationalLoanInstallementReport' , lateOrganizationalLoanInstallementReportRouter);
 app.use('/addEmp' , addEmpRouter);
 app.use('/customerAccount',customerAccountRouter);
+//<<<<<<< HEAD
 app.use('/closeAccount',closeAccountRouter);
+//=======
+app.use('/customerAccountOnline',customerAccountOnlineRouter)
+
+//>>>>>>> 42b4b5eaaa99283873975fcea4dbe69ed617f02e
 //>>>>>>> bf1d718e7f9250267f1910a017c05ac281eccb40
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
