@@ -31,7 +31,7 @@ function checkLoan(){
            
             console.log("cannot close account");
         } else {
-            console.log("Dulaj");
+            console.log("ok");
            // DeleteDB();
         }
     });
