@@ -131,7 +131,7 @@ router.post('/', function (req, res) {
   //check account
   function checkAccountNum() {
     console.log("1");
-    conn.query(`SELECT account_num FROM account WHERE account_num = '${account_num}'`, function (err, result) {
+    conn.query(`SELECT account_num FROM account WHERE account_num = '${account_num}' AND state !=0`, function (err, result) {
         if (result.length != 0) {
             checkFixedDeposit();
         } else {
