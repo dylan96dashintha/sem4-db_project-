@@ -4,31 +4,43 @@ var mysql = require('mysql');
 
 function getAccDetails(accNo,callback){
     // console.log("sddddd");
-    conn.query(`SELECT COUNT(account_num) AS count FROM current_account WHERE account_num = `+ accNo, function(err,result){
-        // console.log(result[0].count);
-        if(result[0].count == 1){
-            isPersonalOrOrganization(accNo,function(err,result){
-                result.accType = "currentAccount";
-                // console.log("aaaaaaaaaa");
-                callback(null,result);
-            });
-        }
-        else{
-            conn.query(`SELECT COUNT(account_num) AS count , transaction_count FROM saving_account WHERE account_num = `+ accNo, function(err,result){
-                if(result[0].count == 1){ 
-                    var tCount = result[0].transaction_count;
+    conn.query(`SELECT COUNT(state) as count,state FROM account WHERE account_num = '${accNo}'`,function(err,result){
+        if(err){
+            console.log("llllllllllllllllll");
+            console.error(err);
+        }else if(result[0].state == "1"){
+            console.log(result);
+            conn.query(`SELECT COUNT(account_num) AS count FROM current_account WHERE account_num = '${accNo}'`, function(err,result){
+                console.log(result);
+                if(err){console.log("errorrrr")}
+                if(result[0].count == 1){
                     isPersonalOrOrganization(accNo,function(err,result){
-                        result.transactionCount = tCount;
-                        result.accType = "savingAccount";
+                        result.accType = "currentAccount";
+                        // console.log("aaaaaaaaaa");
                         callback(null,result);
                     });
                 }
                 else{
-                    callback(null,{accOwnerType: null , accType: null});
+                    conn.query(`SELECT COUNT(account_num) AS count , transaction_count FROM saving_account WHERE account_num = '${accNo}'`, function(err,result){
+                        if(result[0].count == 1){ 
+                            var tCount = result[0].transaction_count;
+                            isPersonalOrOrganization(accNo,function(err,result){
+                                result.transactionCount = tCount;
+                                result.accType = "savingAccount";
+                                callback(null,result);
+                            });
+                        }
+                        else{
+                            callback(null,{accOwnerType: null , accType: null});
+                        }
+                    });
                 }
             });
+                }else{
+            callback(null,{accOwnerType: null , accType: null});
         }
     });
+    
 }
 
 function getAccDetails2(accNo){
