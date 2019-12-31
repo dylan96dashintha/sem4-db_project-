@@ -12,8 +12,15 @@ router.get('/', function (req, res, next) {
     var accountList = [];
     var amountList = [];
 
-
-   
+    var count_query=`SELECT COUNT(*) AS num FROM transaction right outer join online_transaction using(transaction_id)`;
+    conn.query(count_query,function(err,result){
+    
+        if (err) throw error;
+    
+        const count1 = JSON.parse(JSON.stringify(result));
+    
+    
+    
     var transaction_query = `SELECT transaction_id,account_num,date,time_transaction,account,amount FROM transaction right outer join online_transaction using(transaction_id) `;
     conn.query(transaction_query,function(err,result){
     
@@ -31,9 +38,10 @@ router.get('/', function (req, res, next) {
 
         
     }
-        res.render('onlineTransfer',{tranc_id : transactionIdList,acc_num:accountNumList, date :dateList , time :timeList, acc : accountList ,  amm :amountList });
+        res.render('onlineTransfer',{count:count1[0].num,tranc_id : transactionIdList,acc_num:accountNumList, date :dateList , time :timeList, acc : accountList ,  amm :amountList });
     
     });
+});
 
 });
 

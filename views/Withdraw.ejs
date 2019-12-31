@@ -30,6 +30,9 @@
     <body>
         <h1 style="text-align: center;">Withdraw Detailss</h1>
          <div id=tab>
+          <h>Number of transactions :-<%= count %> </h>
+          <br>
+          <br>
             <table>
                 <tr>
                     <th>Transaction ID</th>
@@ -39,7 +42,7 @@
                     <th>Withdraw Amount</th>
                     
                   </tr>
-                  <% for(var i=0; i <5; i++) { %>
+                  <% for(var i=0; i <count; i++) { %>
                     <tr>
                       <td><%= tranc_id[i] %></td>
                       <td><%= date[i] %></td>

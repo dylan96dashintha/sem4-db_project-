@@ -12,7 +12,13 @@ router.get('/', function (req, res, next) {
     var accountNumList = [];
     var withdrawAmountList = [];
     
-
+    var count_query=`SELECT COUNT(*) AS num FROM transaction right outer join withdraw using(transaction_id)`;
+    conn.query(count_query,function(err,result){
+    
+        if (err) throw error;
+    
+        const count1 = JSON.parse(JSON.stringify(result));
+    
 
  var withdraw_query = `SELECT transaction_id,date,time_transaction,account_num,withdraw_amount FROM transaction right outer join withdraw using(transaction_id) `;
  
@@ -28,11 +34,11 @@ router.get('/', function (req, res, next) {
         withdrawAmountList.push(response[x].withdraw_amount);
 
      }
-    res.render('Withdraw' , {tranc_id : transactionIdList, date :dateList , time :timeList, acc_num : accountNumList ,  with_amm :withdrawAmountList } );
+    res.render('Withdraw' , {count:count1[0].num,tranc_id : transactionIdList, date :dateList , time :timeList, acc_num : accountNumList ,  with_amm :withdrawAmountList } );
     
      
     
-     
+ });  
 
  });
 });
