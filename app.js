@@ -41,6 +41,7 @@ var closeAccountRouter= require('./routes/closeAccount');
 //=======
 var customerAccountOnlineRouter = require('./routes/customerAccountOnline');
 var logoutRouter = require('./routes/logout');
+var atmRouter =require('./routes/Atm');
 //>>>>>>> 42b4b5eaaa99283873975fcea4dbe69ed617f02e
 //>>>>>>> bf1d718e7f9250267f1910a017c05ac281eccb40
 var app = express();
@@ -97,7 +98,7 @@ app.use('/closeAccount',closeAccountRouter);
 //=======
 app.use('/customerAccountOnline',customerAccountOnlineRouter);
 app.use('/logout',logoutRouter);
-
+app.use('/Atm',atmRouter);
 //>>>>>>> 42b4b5eaaa99283873975fcea4dbe69ed617f02e
 //>>>>>>> bf1d718e7f9250267f1910a017c05ac281eccb40
 // catch 404 and forward to error handler
