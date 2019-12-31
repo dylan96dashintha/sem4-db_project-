@@ -7,7 +7,12 @@ var moneyTransfer = require('../models/moneyTransfer');
 var checkAccDetail = require('../models/accountDetails').checkAccDetails;
 
 router.get('/',function(req,res,next){
-    res.render('addAccountDetails');
+    if(req.session.username && req.session.logtype == "customer"){
+        res.render('addAccountDetails',{msg:null});
+    }else{
+        res.render('login');
+    }
+
     
 });
 
@@ -18,21 +23,29 @@ router.post('/',function(req,res){
     var branch = req.body.branch;
     var fromAccNo = req.body.fromAccNo; //meka thawa hadanna tyeno
     var amount = req.body.amount;
+    var accNo = req.session.accNo;
 
-    checkAccDetail(sendToAccNo,accHolderName,branch,(err,result)=>{
-        if(result){
-            moneyTransfer(fromAccNo,sendToAccNo,amount,(err,result)=>{
-                if(err){
-                    res.render('addAccountDetails',{err:result});
+    if(req.session.username && req.session.logtype == "customer"){
+        if(fromAccNo == accNo){        
+            checkAccDetail(sendToAccNo,accHolderName,branch,(err,result)=>{
+                if(result){
+                    moneyTransfer(fromAccNo,sendToAccNo,amount,(err,result)=>{
+                        if(err){
+                            res.render('addAccountDetails',{msg:result});
+                        }else{
+                            res.render('customerAccountOnline',{msg:"Successfully send Rs. "+amount+" from "+fromAccNo+" to "+sendToAccNo,accNo:fromAccNo})
+                        }
+                    });
                 }else{
-                    res.send("money transfertd successfully");
+                    res.render('addAccountDetails',{msg:"You Enterd Details Are Not Correct"})
                 }
             });
         }else{
-            res.render('addAccountDetails',{err:"You Enterd Details Are Not Correct"})
+            res.render('addAccountDetails',{msg:"Your Acccount number is wrong"})
         }
-    });
-
+    }else{
+        res.render('login');
+    }
 });
 
 module.exports = router;

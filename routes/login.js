@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var conn = require('./connection');
+var getEmpBranch = require('../models/employee').getEmpBranchName;
 //const session = require('express-session');
 
 router.get('/',function(req,res,next){
@@ -32,7 +33,13 @@ router.post('/',function(req,res){
                         if(result[0].counter == 0){
                             req.session.logtype = "emp";
                             req.session.username = uname;
-                            res.redirect('/customerAccount');
+                            conn.query(`SELECT branch_name FROM emp_branch WHERE username = '${uname}'`,function(err,result){
+                                if(err){console.error(err);}
+                                else{
+                                    req.session.branch = result[0].branch_name;
+                                    res.redirect('/customerAccount');
+                                }
+                            });
                         }else{
                             req.session.emp_id = emp_id;
                             res.redirect('/branchManagerProfile');
@@ -46,13 +53,16 @@ router.post('/',function(req,res){
             }else if(username == uname && pswd == psw && emp_id == null){
                 check = true;
                 req.session.username = username
-                res.redirect('/customProfile');
+                req.session.logtype = "customer";
+                res.redirect('customProfile');
+                
                 break;
             }
          }
 
          if(check == false){
-             res.send("login unsuccessful");
+
+             res.render('login');
 
          }
          

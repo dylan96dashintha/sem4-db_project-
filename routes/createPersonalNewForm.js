@@ -33,6 +33,7 @@ router.post('/',function(req,res){
     
     function checkNic(){
         conn.query('SELECT count(nic) as count FROM person WHERE nic = ' + nic, (err,result) => {
+            console.log(result);
             if (result[0].count == 0){
                 checkCustomId();
             }else {

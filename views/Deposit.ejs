@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <title>Deposit</title>    
+    </head>
+    <style>
+        body {
+    background-color: rgba(255, 255, 2555, 1.0);
+    
+    background-image: url("https://www.transparenttextures.com/patterns/always-grey.png");
+  }  
+  .tab{
+    align-content: center;
+  }
+
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    align-content: center;
+  } 
+    </style>
+    <body>
+        <h1 style= "text-align:center;">Deposit Details</h1>
+        <div id=tab>
+            <table>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Account Number</th>
+                    <th>Deposit Amount</th>
+                    
+                  </tr>
+                  <% for(var i=0; i <5; i++) { %>
+                    <tr>
+                      <td><%= tranc_id[i] %></td>
+                      <td><%= date[i] %></td>
+                      <td><%= time[i] %></td>
+                      <td><%= acc_num[i] %></td>
+                      <td><%=depo_amm[i] %></td>
+                      
+                      
+                    </tr>
+                 <% } %>
+                   
+             </table>
+            </div> 
+          
+    </body>

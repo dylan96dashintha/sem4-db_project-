@@ -4,7 +4,8 @@ var accDetails = require('../models/accountDetails').getAccDetails;
 
 
 router.get('/',function(req,res,next){
-    res.render('employee');
+
+    res.render('employee',{msg:null,branch:req.session.branch});
 
 });
 
