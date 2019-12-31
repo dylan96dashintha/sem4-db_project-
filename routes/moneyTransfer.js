@@ -33,7 +33,7 @@ router.post('/',function(req,res){
                         if(err){
                             res.render('addAccountDetails',{msg:result});
                         }else{
-                            res.render('customerAccountOnline',{msg:"Successfully send Rs. "+amount+" from "+fromAccNo+" to "+sendToAccNo,accNo:fromAccNo})
+                            res.render('customerAccountOnline',{msg:"Successfully send Rs. "+amount+" from "+fromAccNo+" to "+sendToAccNo,accNo:fromAccNo,customer:req.session.username})
                         }
                     });
                 }else{

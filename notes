@@ -6,4 +6,23 @@
 CREATE OR REPLACE VIEW person_details AS SELECT person.nic as nic, person.first_name as first_name, person.last_name as last_name, account.account_num as account_num,account.balance as balance,account.customer_id as customer_id,account.state as state, branch.region as branch_regon, branch.name as branch_name FROM person, account, branch where person.customer_id = account.customer_id and account.branch_id = branch.branch_id;
 CREATE OR REPLACE VIEW organization_details AS SELECT organization.reg_num as reg_num, organization.name as name , account.account_num as account_num ,account.balance as balance,account.customer_id as customer_id,account.state as state, branch.region as branch_regon, branch.name as branch_name FROM organization, account, branch where organization.customer_id = account.customer_id and account.branch_id = branch.branch_id
 
+CREATE OR REPLACE VIEW organization_details AS SELECT organization.reg_num as reg_num, organization.name as name , account.account_num as account_num ,account.balance as balance, branch.region as branch_regon, branch.name as branch_name FROM organization, account, branch where organization.customer_id = account.customer_id and account.branch_id = branch.branch_id
+
+
+
+//dilan
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `lateloanreport`()
+    MODIFIES SQL DATA
+BEGIN
+DROP VIEW IF EXISTS lateloanreport;
+CREATE VIEW lateloanreport AS SELECT account.customer_id,account.branch_id, installement.loan_id ,loan.account_num FROM account, loan,installement where installement.late_not_late_state = 'nlat' AND loan.loan_id = installement.loan_id   AND account.account_num = loan.account_num;
+END$$
+DELIMITER ;
+
+
+
+//
 CREATE OR REPLACE VIEW emp_branch AS SELECT employee_login.username AS username, branch.name AS branch_name, branch.branch_id AS branch_id FROM employee_login NATURAL JOIN employee NATURAL JOIN branch;

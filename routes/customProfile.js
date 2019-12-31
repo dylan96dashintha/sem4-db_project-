@@ -6,11 +6,12 @@ var getMultipleAccDetails = require('../models/accountDetails').getMultipleAccDe
 
 router.get('/',function(req,res,next){
     let username = req.session.username;
-    if(req.session.username && req.session.logtype){
+    if(req.session.username && req.session.logtype == "customer"){
         // res.render('customProfile',{msg:null});
         getAccounts(username,function(err,result){
+            console.log(result);
             if(result){
-                res.render('customProfile',{details:result,count:result.length,msg:null})
+                res.render('customProfile',{details:result,count:result.length,msg:null,customer:req.session.username})
                 // console.log(getMultipleAccDetails(result));
                     // console.log(result);
                     // res.send("dff");

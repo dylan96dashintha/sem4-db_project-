@@ -14,13 +14,13 @@
 
     <nav class="navbar navbar-light bg-light static-top">
         <div class="container">
-          <a class="navbar-brand" href="#">Emplyoee</a>
+          <a class="navbar-brand" href="#">Emplyoee: <%=emp%></a>
           <%if (msg != null){%>
             <p class="success"><%=msg%></p>
             <%}   %>
             <p class="success">Branch : <%=branch%></p>
 
-          <a class="btn btn-primary" href="#">Log out</a>
+          <a class="btn btn-primary" href="logout">Log out</a>
         </div>
       </nav>
 
@@ -46,7 +46,12 @@
           </div>
         </div>
       </header>
+      <button><a href="normalLoanRequest">Apply for loan</a></button>
 
+      <button><a href="loanInstallement">Loan Installement</a></button>
+  
+      <button><a href="accountDetails">Account details</a></button>
+      
       <!-- Example single danger button -->
 <div class="container-fluid">
     <!-- <div class="row mx-md-auto"> -->
@@ -59,6 +64,7 @@
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="createOrganizationalNewAccount">Organizational Account</a>
         </div>
+        <a href="closeAccount" type="button" class="btn btn-danger">Close Account</a>
     </div>  
 <!-- </div>   -->
 </div>
