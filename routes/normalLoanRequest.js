@@ -80,7 +80,7 @@ router.post('/', function (req, res) {
                                         }
                                         res.send("successfully updated");
                                         console.log('Transaction Complete.');
-                                        conn.end();
+                                        // conn.end();
                                       });
     
                                 });

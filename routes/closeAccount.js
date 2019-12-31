@@ -3,7 +3,18 @@ var router = express.Router();
 var conn = require('./connection');
 
 router.get('/', function(req,res,next){
-    res.render('closeAccount');
+    var sessionCheck = false;
+    
+    if((req.session.logtype == "emp" || req.session.logtype == "manager")){ // check session.Is logged in...
+        if(req.session.username){
+            sessionCheck = true;
+        }
+    }
+    if(sessionCheck){
+        res.render('closeAccount');
+    }else{
+        res.render('login')
+    }
 });
 
 
@@ -28,8 +39,9 @@ function UpdateDB(){
             throw err;
           });
         }
-       console.log('Update');
-        conn.end();
+    //    console.log('Update');
+    //     conn.end();
+    res.render('employee',{msg:null,branch:req.session.branch,emp:req.session.username});
       });
 
 
@@ -47,7 +59,7 @@ function checkaccount(){
             checkLoan();
         }
         else{
-            console.log("Account number is incorrect or already closed account")
+            res.render('employee',{msg:"No account exsists or account is allready closed",branch:req.session.branch,emp:req.session.username});
         }
     })
 }
@@ -58,7 +70,7 @@ function checkLoan(){
     conn.query(`SELECT loan_id FROM loan WHERE account_num = '${account_num}'`, function (err,result) {
         if (result.length != 0) {
            
-            console.log("cannot close account");
+            res.render('employee',{msg:"Cannot close account",branch:req.session.branch,emp:req.session.username});
         } else {
             
             UpdateDB();

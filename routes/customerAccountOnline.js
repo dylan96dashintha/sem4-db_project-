@@ -9,7 +9,7 @@ var accNo;
 
 router.get('/',function(req,res,next){
     if(req.session.username && req.session.logtype == "customer"){
-        res.render('customerAccountOnline',{msg:null});
+        res.render('customerAccountOnline',{msg:null,customer:req.session.username});
     }else{
         res.render('login');
     }
@@ -24,11 +24,11 @@ router.get('/',function(req,res,next){
 // });
 
 router.post('/',function(req,res,next){
-    var username = req.session.usename;
+    // var username = req.session.username;
     accNo = req.body.accNo;
     if(req.session.username && req.session.logtype == "customer"){
         req.session.accNo = accNo;
-        res.render('customerAccountOnline',{msg:null,accNo:accNo});
+        res.render('customerAccountOnline',{msg:null,accNo:accNo,customer:req.session.username});
     }else{
         res.render('login');
     }
