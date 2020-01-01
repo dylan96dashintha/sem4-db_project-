@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 31, 2019 at 01:15 PM
+-- Generation Time: Jan 01, 2020 at 02:51 PM
 -- Server version: 10.4.10-MariaDB
 -- PHP Version: 7.3.12
 
@@ -54,11 +54,11 @@ CREATE TABLE `account` (
 --
 
 INSERT INTO `account` (`account_num`, `branch_id`, `balance`, `start_time`, `state`, `customer_id`) VALUES
-('80123', '00001', 5722, '2019-12-03', 0, '777777'),
-('80234', '0001', 8397.62, '2019-12-09', 0, '666666'),
-('80345', '00002', 1433.62, '2019-12-17', 1, '555555'),
-('80456', '00002', 1000, '2019-12-03', 1, '888888'),
-('80567', '00001', 624.62, '2019-12-17', 1, '777777'),
+('80123', '00001', 3830.7, '2019-12-03', 0, '777777'),
+('80234', '0001', 1254.4, '2019-12-09', 0, '666666'),
+('80345', '00002', 2420, '2019-12-17', 1, '555555'),
+('80456', '00002', 1379.84, '2019-12-03', 1, '888888'),
+('80567', '00001', 6050, '2019-12-17', 1, '777777'),
 ('80678', '00002', 1100, '2019-12-24', 1, '777777');
 
 -- --------------------------------------------------------
@@ -338,7 +338,7 @@ CREATE TABLE `fixed_deposit` (
   `num_months` int(4) NOT NULL,
   `start_date` date NOT NULL,
   `amount` float(15,2) NOT NULL,
-  `net_interest` float(5,3) NOT NULL,
+  `net_interest` float(10,3) NOT NULL,
   `account_num` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -347,9 +347,9 @@ CREATE TABLE `fixed_deposit` (
 --
 
 INSERT INTO `fixed_deposit` (`fd_id`, `num_months`, `start_date`, `amount`, `net_interest`, `account_num`) VALUES
-('1111', 3, '2019-12-31', 200000.00, 12.000, '80567'),
-('2222', 6, '2019-12-31', 500000.00, 12.000, '80234'),
-('3333', 12, '2019-12-31', 800000.00, 12.000, '80234');
+('1111', 3, '2020-01-01', 13000.00, 120.000, '80567'),
+('2222', 6, '2020-01-01', 108362.27, 19476.408, '80234'),
+('3333', 12, '2020-01-01', 172682.27, 31054.008, '80234');
 
 -- --------------------------------------------------------
 
@@ -423,7 +423,7 @@ CREATE TABLE `installement_history` (
 
 CREATE TABLE `interest` (
   `Date` date NOT NULL,
-  `interest_amount` float(5,3) NOT NULL,
+  `interest_amount` float(10,3) NOT NULL,
   `account_num` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -432,8 +432,10 @@ CREATE TABLE `interest` (
 --
 
 INSERT INTO `interest` (`Date`, `interest_amount`, `account_num`) VALUES
-('2019-12-31', 99.999, '80234'),
-('2019-12-31', 99.999, '80345');
+('2020-01-01', 0.000, '80123'),
+('2020-01-02', 0.000, '80234'),
+('2020-01-03', 0.000, '80345'),
+('2020-01-04', 0.000, '80567');
 
 -- --------------------------------------------------------
 
@@ -660,17 +662,21 @@ CREATE TABLE `saving_account` (
   `account_num` varchar(10) NOT NULL,
   `transaction_count` int(10) NOT NULL,
   `balance` float(15,2) NOT NULL,
-  `type_id` int(1) NOT NULL
+  `type_id` int(1) NOT NULL,
+  `Date` date NOT NULL,
+  `interest_amount` float(11,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `saving_account`
 --
 
-INSERT INTO `saving_account` (`account_num`, `transaction_count`, `balance`, `type_id`) VALUES
-('80234', 5, 8397.62, 1),
-('80345', 2, 1433.62, 2),
-('80567', 3, 624.62, 3);
+INSERT INTO `saving_account` (`account_num`, `transaction_count`, `balance`, `type_id`, `Date`, `interest_amount`) VALUES
+('80123', 0, 3830.70, 4, '2020-01-01', 440.70),
+('80234', 5, 1254.40, 1, '2020-01-01', 134.40),
+('80345', 2, 2420.00, 2, '2020-01-01', 220.00),
+('80456', 0, 1379.84, 1, '2020-01-01', 147.84),
+('80567', 3, 6050.00, 3, '2020-01-01', 550.00);
 
 --
 -- Triggers `saving_account`
@@ -1104,27 +1110,36 @@ UPDATE installement SET  late_not_late_state = 'nlate'  , checked_date = CURRENT
 
 END$$
 
-CREATE DEFINER=`root`@`localhost` EVENT `Account_Interest` ON SCHEDULE EVERY 1 DAY STARTS '2019-12-01 00:01:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
-UPDATE interest,saving_account,account_type SET interest.interest_amount = (saving_account.balance*0.12), saving_account.balance = saving_account.balance + interest.interest_amount, interest.Date = CURRENT_DATE WHERE account_type.type='Children' and CURRENT_DATE - interest.Date = 30;
+CREATE DEFINER=`root`@`localhost` EVENT `Account_Interest` ON SCHEDULE EVERY 1 DAY STARTS '2019-12-01 19:18:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
 
-UPDATE interest,saving_account,account_type SET interest.interest_amount = (saving_account.balance*0.10), saving_account.balance = saving_account.balance + interest.interest_amount, interest.Date = CURRENT_DATE WHERE account_type.type='Adult(18+)' and CURRENT_DATE - interest.Date = 30;
+UPDATE saving_account SET interest_amount=(balance*0.12), Date = CURRENT_DATE WHERE (account_num) in (SELECT account_num FROM saving_account WHERE type_id=1) AND CURRENT_DATE - Date = 30;
 
-UPDATE interest,saving_account,account_type SET interest.interest_amount = (saving_account.balance*0.10), saving_account.balance = saving_account.balance + interest.interest_amount, interest.Date = CURRENT_DATE WHERE account_type.type='Teen' and CURRENT_DATE - interest.Date = 30;
+UPDATE saving_account SET interest_amount=(balance*0.1), Date = CURRENT_DATE WHERE (account_num) in (SELECT account_num FROM saving_account WHERE type_id=2) AND CURRENT_DATE - Date = 30;
 
-UPDATE interest,saving_account,account_type SET interest.interest_amount = (saving_account.balance*0.13), saving_account.balance = saving_account.balance + interest.interest_amount, interest.Date = CURRENT_DATE WHERE account_type.type='Senior(60+' and CURRENT_DATE - interest.Date = 30;
+UPDATE saving_account SET interest_amount=(balance*0.1), Date = CURRENT_DATE WHERE (account_num) in (SELECT account_num FROM saving_account WHERE type_id=3) AND CURRENT_DATE - Date = 30;
+
+UPDATE saving_account SET interest_amount=(balance*0.13), Date = CURRENT_DATE WHERE (account_num) in (SELECT account_num FROM saving_account WHERE type_id=4) AND CURRENT_DATE - Date = 30;
+
+UPDATE saving_account SET balance = balance + interest_amount;
 
 END$$
 
-CREATE DEFINER=`root`@`localhost` EVENT `Account_Interest(FD - 3 Months)` ON SCHEDULE EVERY 1 DAY STARTS '2019-12-01 00:01:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
-UPDATE fixed_deposit SET net_interest = (amount*0.12), amount = amount + net_interest, start_date = CURRENT_DATE WHERE num_months = 3 and CURRENT_DATE - start_date = 90 ;
+CREATE DEFINER=`root`@`localhost` EVENT `Account_Interest(FD - 3 Months)` ON SCHEDULE EVERY 1 DAY STARTS '2019-12-01 00:11:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
+
+UPDATE fixed_deposit SET net_interest = (amount*0.12), amount = amount + net_interest, start_date = CURRENT_DATE WHERE (account_num) in (select account_num from fixed_deposit where num_months = 3) AND CURRENT_DATE - start_date = 90;
+
 END$$
 
 CREATE DEFINER=`root`@`localhost` EVENT `Account_Interest(FD - 6 Months)` ON SCHEDULE EVERY 1 DAY STARTS '2019-12-01 00:01:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
-UPDATE fixed_deposit SET net_interest = (amount*0.16), amount = amount + net_interest, start_date = CURRENT_DATE WHERE num_months = 6 and CURRENT_DATE - start_date = 180 ;
+
+UPDATE fixed_deposit SET net_interest = (amount*0.16), amount = amount + net_interest, start_date = CURRENT_DATE WHERE (account_num) in (select account_num from fixed_deposit where num_months = 6) AND CURRENT_DATE - start_date = 180;
+
 END$$
 
 CREATE DEFINER=`root`@`localhost` EVENT `Account_Interest(FD - 12 Months)` ON SCHEDULE EVERY 1 DAY STARTS '2019-12-01 00:01:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
-UPDATE fixed_deposit SET net_interest = (amount*0.18), amount = amount + net_interest, start_date = CURRENT_DATE WHERE num_months = 12 and CURRENT_DATE - start_date = 360 ;
+
+UPDATE fixed_deposit SET net_interest = (amount*0.18), amount = amount + net_interest, start_date = CURRENT_DATE WHERE (account_num) in (select account_num from fixed_deposit where num_months = 12) AND CURRENT_DATE - start_date = 360;
+
 END$$
 
 DELIMITER ;

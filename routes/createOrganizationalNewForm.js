@@ -143,7 +143,7 @@ router.post('/',function(req,res){
         });
 
     }
-            
+       res.send("Account Created");     
 // checkRegNum();
 });
 
