@@ -33,16 +33,26 @@ router.post('/',function(req,res){
                         if(result[0].counter == 0){
                             req.session.logtype = "emp";
                             req.session.username = uname;
-                            conn.query(`SELECT branch_name FROM emp_branch WHERE username = '${uname}'`,function(err,result){
+                            conn.query(`SELECT branch_name,branch_id FROM emp_branch WHERE username = '${uname}'`,function(err,result){
                                 if(err){console.error(err);}
                                 else{
                                     req.session.branch = result[0].branch_name;
+                                    req.session.branch_id = result[0].branch_id;
+
                                     res.redirect('/customerAccount');
                                 }
                             });
                         }else{
-                            req.session.emp_id = emp_id;
-                            res.redirect('/branchManagerProfile');
+                            conn.query(`SELECT branch_name FROM emp_branch WHERE username = '${uname}'`,function(err,result){
+                                if(err){console.error(err);}
+                                else{
+                                    req.session.branch = result[0].branch_name;
+                                    req.session.emp_id = emp_id;
+                                    req.session.username = uname;
+                                    req.session.logtype = "manager";
+                                    res.redirect('/branchManagerProfile');
+                                }
+                            });
 
                         }
 
