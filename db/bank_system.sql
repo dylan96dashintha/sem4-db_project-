@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 31, 2019 at 07:15 AM
--- Server version: 10.1.37-MariaDB
--- PHP Version: 7.3.1
+-- Generation Time: Dec 31, 2019 at 01:15 PM
+-- Server version: 10.4.10-MariaDB
+-- PHP Version: 7.3.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -55,10 +55,10 @@ CREATE TABLE `account` (
 
 INSERT INTO `account` (`account_num`, `branch_id`, `balance`, `start_time`, `state`, `customer_id`) VALUES
 ('80123', '00001', 5722, '2019-12-03', 0, '777777'),
-('80234', '0001', 32973, '2019-12-09', 0, '666666'),
-('80345', '00002', 1009, '2019-12-17', 1, '555555'),
+('80234', '0001', 8397.62, '2019-12-09', 0, '666666'),
+('80345', '00002', 1433.62, '2019-12-17', 1, '555555'),
 ('80456', '00002', 1000, '2019-12-03', 1, '888888'),
-('80567', '00001', 200, '2019-12-17', 1, '777777'),
+('80567', '00001', 624.62, '2019-12-17', 1, '777777'),
 ('80678', '00002', 1100, '2019-12-24', 1, '777777');
 
 -- --------------------------------------------------------
@@ -69,7 +69,7 @@ INSERT INTO `account` (`account_num`, `branch_id`, `balance`, `start_time`, `sta
 
 CREATE TABLE `account_type` (
   `type_id` int(1) NOT NULL,
-  `type` varchar(11) NOT NULL,
+  `type` varchar(15) NOT NULL,
   `interest_rate` int(2) NOT NULL,
   `minimum_val` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -338,9 +338,18 @@ CREATE TABLE `fixed_deposit` (
   `num_months` int(4) NOT NULL,
   `start_date` date NOT NULL,
   `amount` float(15,2) NOT NULL,
-  `net_interest` varchar(3) NOT NULL,
+  `net_interest` float(5,3) NOT NULL,
   `account_num` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `fixed_deposit`
+--
+
+INSERT INTO `fixed_deposit` (`fd_id`, `num_months`, `start_date`, `amount`, `net_interest`, `account_num`) VALUES
+('1111', 3, '2019-12-31', 200000.00, 12.000, '80567'),
+('2222', 6, '2019-12-31', 500000.00, 12.000, '80234'),
+('3333', 12, '2019-12-31', 800000.00, 12.000, '80234');
 
 -- --------------------------------------------------------
 
@@ -413,10 +422,18 @@ CREATE TABLE `installement_history` (
 --
 
 CREATE TABLE `interest` (
-  `month` varchar(5) NOT NULL,
+  `Date` date NOT NULL,
   `interest_amount` float(5,3) NOT NULL,
   `account_num` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `interest`
+--
+
+INSERT INTO `interest` (`Date`, `interest_amount`, `account_num`) VALUES
+('2019-12-31', 99.999, '80234'),
+('2019-12-31', 99.999, '80345');
 
 -- --------------------------------------------------------
 
@@ -651,9 +668,9 @@ CREATE TABLE `saving_account` (
 --
 
 INSERT INTO `saving_account` (`account_num`, `transaction_count`, `balance`, `type_id`) VALUES
-('80234', 5, 7973.00, 0),
-('80345', 2, 1009.00, 0),
-('80567', 3, 200.00, 0);
+('80234', 5, 8397.62, 1),
+('80345', 2, 1433.62, 2),
+('80567', 3, 624.62, 3);
 
 --
 -- Triggers `saving_account`
@@ -718,7 +735,7 @@ INSERT INTO `withdraw` (`withdraw_amount`, `transaction_id`) VALUES
 --
 DROP TABLE IF EXISTS `emp_branch`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `emp_branch`  AS  select `employee_login`.`username` AS `username`,`branch`.`name` AS `branch_name`,`branch`.`branch_id` AS `branch_id` from ((`employee_login` join `employee` on((`employee_login`.`emp_id` = `employee`.`emp_id`))) join `branch` on((`employee`.`branch_id` = `branch`.`branch_id`))) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `emp_branch`  AS  select `employee_login`.`username` AS `username`,`branch`.`name` AS `branch_name`,`branch`.`branch_id` AS `branch_id` from ((`employee_login` join `employee` on(`employee_login`.`emp_id` = `employee`.`emp_id`)) join `branch` on(`employee`.`branch_id` = `branch`.`branch_id`)) ;
 
 -- --------------------------------------------------------
 
@@ -727,7 +744,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `organization_details`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `organization_details`  AS  select `organization`.`reg_num` AS `reg_num`,`organization`.`name` AS `name`,`account`.`account_num` AS `account_num`,`account`.`balance` AS `balance`,`account`.`customer_id` AS `customer_id`,`account`.`state` AS `state`,`branch`.`region` AS `branch_regon`,`branch`.`name` AS `branch_name` from ((`organization` join `account`) join `branch`) where ((`organization`.`customer_id` = `account`.`customer_id`) and (`account`.`branch_id` = `branch`.`branch_id`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `organization_details`  AS  select `organization`.`reg_num` AS `reg_num`,`organization`.`name` AS `name`,`account`.`account_num` AS `account_num`,`account`.`balance` AS `balance`,`account`.`customer_id` AS `customer_id`,`account`.`state` AS `state`,`branch`.`region` AS `branch_regon`,`branch`.`name` AS `branch_name` from ((`organization` join `account`) join `branch`) where `organization`.`customer_id` = `account`.`customer_id` and `account`.`branch_id` = `branch`.`branch_id` ;
 
 -- --------------------------------------------------------
 
@@ -736,7 +753,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `person_details`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `person_details`  AS  select `person`.`nic` AS `nic`,`person`.`first_name` AS `first_name`,`person`.`last_name` AS `last_name`,`account`.`account_num` AS `account_num`,`account`.`balance` AS `balance`,`account`.`customer_id` AS `customer_id`,`account`.`state` AS `state`,`branch`.`region` AS `branch_regon`,`branch`.`name` AS `branch_name` from ((`person` join `account`) join `branch`) where ((`person`.`customer_id` = `account`.`customer_id`) and (`account`.`branch_id` = `branch`.`branch_id`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `person_details`  AS  select `person`.`nic` AS `nic`,`person`.`first_name` AS `first_name`,`person`.`last_name` AS `last_name`,`account`.`account_num` AS `account_num`,`account`.`balance` AS `balance`,`account`.`customer_id` AS `customer_id`,`account`.`state` AS `state`,`branch`.`region` AS `branch_regon`,`branch`.`name` AS `branch_name` from ((`person` join `account`) join `branch`) where `person`.`customer_id` = `account`.`customer_id` and `account`.`branch_id` = `branch`.`branch_id` ;
 
 --
 -- Indexes for dumped tables
@@ -1085,6 +1102,29 @@ CREATE DEFINER=`root`@`localhost` EVENT `loan_Installement` ON SCHEDULE EVERY 1 
 UPDATE installement SET  late_not_late_state = 'late'  , checked_date = CURRENT_DATE  WHERE  (date_pavement - checked_date <0 OR paied_amount - installement_amount <0 ) AND  CURRENT_DATE - checked_date =0 ; 
 UPDATE installement SET  late_not_late_state = 'nlate'  , checked_date = CURRENT_DATE  WHERE  date_pavement - checked_date >= 0 AND paied_amount - installement_amount >= 0 AND  CURRENT_DATE - checked_date =0 ; 
 
+END$$
+
+CREATE DEFINER=`root`@`localhost` EVENT `Account_Interest` ON SCHEDULE EVERY 1 DAY STARTS '2019-12-01 00:01:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
+UPDATE interest,saving_account,account_type SET interest.interest_amount = (saving_account.balance*0.12), saving_account.balance = saving_account.balance + interest.interest_amount, interest.Date = CURRENT_DATE WHERE account_type.type='Children' and CURRENT_DATE - interest.Date = 30;
+
+UPDATE interest,saving_account,account_type SET interest.interest_amount = (saving_account.balance*0.10), saving_account.balance = saving_account.balance + interest.interest_amount, interest.Date = CURRENT_DATE WHERE account_type.type='Adult(18+)' and CURRENT_DATE - interest.Date = 30;
+
+UPDATE interest,saving_account,account_type SET interest.interest_amount = (saving_account.balance*0.10), saving_account.balance = saving_account.balance + interest.interest_amount, interest.Date = CURRENT_DATE WHERE account_type.type='Teen' and CURRENT_DATE - interest.Date = 30;
+
+UPDATE interest,saving_account,account_type SET interest.interest_amount = (saving_account.balance*0.13), saving_account.balance = saving_account.balance + interest.interest_amount, interest.Date = CURRENT_DATE WHERE account_type.type='Senior(60+' and CURRENT_DATE - interest.Date = 30;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` EVENT `Account_Interest(FD - 3 Months)` ON SCHEDULE EVERY 1 DAY STARTS '2019-12-01 00:01:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
+UPDATE fixed_deposit SET net_interest = (amount*0.12), amount = amount + net_interest, start_date = CURRENT_DATE WHERE num_months = 3 and CURRENT_DATE - start_date = 90 ;
+END$$
+
+CREATE DEFINER=`root`@`localhost` EVENT `Account_Interest(FD - 6 Months)` ON SCHEDULE EVERY 1 DAY STARTS '2019-12-01 00:01:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
+UPDATE fixed_deposit SET net_interest = (amount*0.16), amount = amount + net_interest, start_date = CURRENT_DATE WHERE num_months = 6 and CURRENT_DATE - start_date = 180 ;
+END$$
+
+CREATE DEFINER=`root`@`localhost` EVENT `Account_Interest(FD - 12 Months)` ON SCHEDULE EVERY 1 DAY STARTS '2019-12-01 00:01:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
+UPDATE fixed_deposit SET net_interest = (amount*0.18), amount = amount + net_interest, start_date = CURRENT_DATE WHERE num_months = 12 and CURRENT_DATE - start_date = 360 ;
 END$$
 
 DELIMITER ;

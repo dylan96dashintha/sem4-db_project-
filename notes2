@@ -1,0 +1,31 @@
+CREATE DEFINER=`root`@`localhost` EVENT `Account_Interest` ON SCHEDULE EVERY 1 DAY STARTS '2019-12-01 00:01:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
+UPDATE interest,saving_account,account_type SET interest.interest_amount = (saving_account.balance*0.12), saving_account.balance = saving_account.balance + interest.interest_amount, interest.Date = CURRENT_DATE WHERE account_type.type='Children' and CURRENT_DATE - interest.Date = 30 ;
+
+UPDATE interest,saving_account,account_type SET interest.interest_amount = (saving_account.balance*0.10), saving_account.balance = saving_account.balance + interest.interest_amount, interest.Date = CURRENT_DATE WHERE account_type.type='Adult(18+)' and CURRENT_DATE - interest.Date = 30 ;
+
+UPDATE interest,saving_account,account_type SET interest.interest_amount = (saving_account.balance*0.10), saving_account.balance = saving_account.balance + interest.interest_amount, interest.Date = CURRENT_DATE WHERE account_type.type='Teen' and CURRENT_DATE - interest.Date = 30 ;
+
+UPDATE interest,saving_account,account_type SET interest.interest_amount = (saving_account.balance*0.13), saving_account.balance = saving_account.balance + interest.interest_amount, interest.Date = CURRENT_DATE WHERE account_type.type='Senior(60+' and CURRENT_DATE - interest.Date = 30 ;
+
+END
+.......................
+
+CREATE DEFINER=`root`@`localhost` EVENT `Account_Interest(FD - 3 Months)` ON SCHEDULE EVERY 1 DAY STARTS '2019-12-01 00:01:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
+UPDATE fixed_deposit SET net_interest = (amount*0.12), amount = amount + net_interest, start_date = CURRENT_DATE WHERE num_months = 3 and CURRENT_DATE - start_date = 90 ;
+END
+
+.......................
+
+CREATE DEFINER=`root`@`localhost` EVENT `Account_Interest(FD - 6 Months)` ON SCHEDULE EVERY 1 DAY STARTS '2019-12-01 00:01:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
+UPDATE fixed_deposit SET net_interest = (amount*0.16), amount = amount + net_interest, start_date = CURRENT_DATE WHERE num_months = 6 and CURRENT_DATE - start_date = 180 ;
+END
+
+.......................
+
+CREATE DEFINER=`root`@`localhost` EVENT `Account_Interest(FD - 12 Months)` ON SCHEDULE EVERY 1 DAY STARTS '2019-12-01 00:01:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
+UPDATE fixed_deposit SET net_interest = (amount*0.18), amount = amount + net_interest, start_date = CURRENT_DATE WHERE num_months = 12 and CURRENT_DATE - start_date = 360 ;
+END
+
+
+
+

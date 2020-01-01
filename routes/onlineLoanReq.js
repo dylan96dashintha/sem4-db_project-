@@ -12,6 +12,7 @@ router.post('/', function (req, res) {
   let account_num = req.body.account_num;
   let repayment = req.body.repayment;
   let amount = req.body.amount;
+  let installment_amount=(amount*0.1)/repayment
   //let fd_id = req.body.fd_id;
   console.log
   console.log(account_num);
@@ -27,7 +28,6 @@ router.post('/', function (req, res) {
       var fd_amount_query=`SELECT amount from fixed_deposit where account_num = ${account_num}`;
       conn.query(fd_amount_query,function(err,result){
      if (err) throw error;
-
      const response = JSON.parse(JSON.stringify(result));
      const fd_amount = response[0].amount;
 
@@ -60,13 +60,12 @@ router.post('/', function (req, res) {
       var fd_id_query = `SELECT fd_id from fixed_deposit where account_num = ${account_num}`;
       conn.query(fd_id_query,function(err,result){
         if (err) throw error;
-
         const response = JSON.parse(JSON.stringify(result));
         const fd_id = response[0].fd_id;
-
+        
 
         // update loan table
-        var sqlquery = "INSERT INTO loan (loan_id,loan_amount,repayment_period,start_date,state,fd_id,account_num) VALUES ('"+loanId+"','"+amount+"','"+repayment+"',curdate(),'1','"+fd_id+"','"+account_num+"')";
+        var sqlquery = "INSERT INTO loan (loan_id,loan_amount,repayment_period,start_date,state,account_num) VALUES ('"+loanId+"','"+amount+"','"+repayment+"',curdate(),'1','"+account_num+"')";
         conn.query(sqlquery, function (err, result) {
           if (err) throw err;
               console.log(result.affectedRows + " record inserted to loan");
@@ -108,7 +107,13 @@ router.post('/', function (req, res) {
           if(err) throw err;
           console.log(result.affectedRows+"record inserted to saving account");
         });
-
+ 
+        //update installment table
+        var installment_query="INSERT INTO installement(loan_id,installement_amount,checked_date,net_loan_amount)VALUES('"+loanId+"' , '"+installment_amount+"', curdate() ,'"+amount+"')";
+        conn.query(installment_query,function(err,result){
+          if(err) throw err;
+          console.log(result.affectedRows+"record inserted to installment");
+        });
 
 
         conn.commit(function(err) {
@@ -119,7 +124,7 @@ router.post('/', function (req, res) {
           }
           res.send("successfully updated");
           console.log('Transaction Complete.');
-          conn.end();
+          //conn.end();
         });
     })
   
@@ -203,7 +208,6 @@ function checkLoanId() {
 
 
 checkLoanId();
-
 
 })
 

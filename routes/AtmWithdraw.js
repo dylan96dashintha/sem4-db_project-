@@ -12,8 +12,13 @@ router.get('/', function (req, res, next) {
     var accountNumList = [];
     var amountList = [];
 
-
- //console.log("Database connected successfully!");
+    var count_query=`SELECT COUNT(*) AS num FROM transaction right outer join atm_withdraw using(transaction_id)`;
+    conn.query(count_query,function(err,result){
+    
+        if (err) throw error;
+    
+        const count1 = JSON.parse(JSON.stringify(result));
+    
  var atmwithdraw_query = `SELECT transaction_id,date,time_transaction,atm_id,account_num,amount FROM transaction right outer join atm_withdraw using(transaction_id) `;
 
  conn.query(atmwithdraw_query,function(err,result){
@@ -32,12 +37,12 @@ router.get('/', function (req, res, next) {
 
      }
 
-     res.render('AtmWithdraw',{tranc_id : transactionIdList,date :dateList , time :timeList,atm:atmIdList, acc_num:accountNumList ,  amm :amountList });
+     res.render('AtmWithdraw',{count:count1[0].num,tranc_id : transactionIdList,date :dateList , time :timeList,atm:atmIdList, acc_num:accountNumList ,  amm :amountList });
 
  });
 
 });
-
+});
     
    
 

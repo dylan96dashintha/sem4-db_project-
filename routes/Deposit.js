@@ -11,6 +11,14 @@ router.get('/', function (req, res, next) {
     var accountNumList = [];
     var depositAmountList = [];
 
+    var count_query=`SELECT COUNT(*) AS num FROM transaction right outer join deposit using(transaction_id)`;
+    conn.query(count_query,function(err,result){
+    
+        if (err) throw error;
+    
+        const count1 = JSON.parse(JSON.stringify(result));
+    
+
  var deposit_query = `SELECT transaction_id,date,time_transaction,account_num,deposit_amount FROM transaction right outer join deposit using(transaction_id) `;
  
  conn.query(deposit_query,function(err,result){
@@ -28,9 +36,9 @@ router.get('/', function (req, res, next) {
      
      }
 
-     res.render('Deposit',{tranc_id : transactionIdList, date :dateList , time :timeList, acc_num:accountNumList ,  depo_amm :depositAmountList });
+     res.render('Deposit',{count:count1[0].num,tranc_id : transactionIdList, date :dateList , time :timeList, acc_num:accountNumList ,  depo_amm :depositAmountList });
 
  }); 
 });   
-    
+});    
 module.exports = router

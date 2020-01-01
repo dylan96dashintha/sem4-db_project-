@@ -28,6 +28,9 @@
     </style>
     <body>
         <h1 style= "text-align:center;">Deposit Details</h1>
+        <p>Number of transactions :-<%= count %> </p>
+        <br>
+        
         <div id=tab>
             <table>
                 <tr>
@@ -38,7 +41,7 @@
                     <th>Deposit Amount</th>
                     
                   </tr>
-                  <% for(var i=0; i <5; i++) { %>
+                  <% for(var i=0; i <count; i++) { %>
                     <tr>
                       <td><%= tranc_id[i] %></td>
                       <td><%= date[i] %></td>

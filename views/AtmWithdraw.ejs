@@ -29,7 +29,9 @@
     <body>
         <h1 style="text-align: center;"> ATM Withdraw</h1>
         <div id=tab>
-            <table>
+          <p>Number of transactions :-<%= count %> </p>
+          <br>
+          <table>
                 <tr>
                     <th>Transaction ID</th>
                     <th>Date</th>
@@ -39,7 +41,7 @@
                     <th>Amount</th>
                     
                   </tr>
-                  <% for(var i=0; i <5; i++) { %>
+                  <% for(var i=0; i <count; i++) { %>
                     <tr>
                       <td><%= tranc_id[i] %></td>
                       <td><%= date[i] %></td>
