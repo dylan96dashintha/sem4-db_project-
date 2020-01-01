@@ -12,11 +12,12 @@ router.get('/',function(req,res,next){
 router.post('/',function(req,res){
     let amount = req.body.amount;
     let plan = req.body.plan;
-    let accountNum = req.body.accountNum;
+    let accountNum = req.session.accNo;
 //    let username = req.session.username;
     let uname = req.session.username;
     let fd; 
     console.log(plan);
+    console.log(accountNum);    
     checkValidity();
 
     function checkValidity(){
@@ -30,6 +31,7 @@ router.post('/',function(req,res){
                         if (err) {
                             res.send(err);
                         }else{
+                            console.log(result);
                             let balance = parseFloat(result[0].balance);
                             if(balance >= amount){
                                     checkFdId();
@@ -87,7 +89,7 @@ router.post('/',function(req,res){
                                 }
                                 res.send("successfully updated");
                                 console.log('Transaction Complete.');
-                                conn.end();
+                                // conn.end();
                               });
                         });
                     }

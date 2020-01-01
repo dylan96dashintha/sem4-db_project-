@@ -13,7 +13,7 @@ router.get('/', function (req, res, next) {
 
 
 router.post('/', function (req, res) {
-    let actNum = req.body.actNum;
+    let actNum = req.session.accountNumber;
     let repayPeriod = req.body.repayPeriod;
     let loanAmount = req.body.loanAmount;
     let empSector = req.body.empSector;
@@ -78,8 +78,7 @@ router.post('/', function (req, res) {
                                             throw err;
                                           });
                                         }
-                                        res.send("successfully updated");
-                                        console.log('Transaction Complete.');
+                                        res.render('employee',{msg:"Succsessfully added loan to "+req.session.accountNumber,branch:req.session.branch,emp:req.session.username});
                                         // conn.end();
                                       });
     
@@ -113,10 +112,10 @@ router.post('/', function (req, res) {
                 if (result.length == 1) {
                     updateDB();
                     //res.send("correct");
-                    console.log(result);
+                    // console.log(result);
                 } else {
                     
-                    res.send("fucker");
+                    res.send("aa");
                 }
             }
         });

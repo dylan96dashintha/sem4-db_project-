@@ -1,8 +1,25 @@
 body {
-  padding: 50px;
+  /* padding: px; */
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+.round-button{
+  border-radius: 10px;
+}
+.center{
+  text-align: center;
+}
+
+.center-box{
+  
+  height: 400px;
+  width: 400px;
+  background-color: aquamarine;
+}
+.center-container{
+  text-align: center;
 }

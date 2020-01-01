@@ -100,7 +100,7 @@ router.post('/' , function(req,res){
                                 }
                                 console.log("employee successfully added to branch");
                                 res.redirect('/branchManagerProfile');
-                                conn.end();
+                                // conn.end();
                                     //alert("employee successfully added to branch");
                             });
                         });

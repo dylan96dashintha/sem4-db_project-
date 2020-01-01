@@ -8,7 +8,9 @@ router.get('/' , function(req,res,next){
 
 router.post('/', function(req,res){
     let installementAmount = req.body.installementAmount;
-    let actNum = req.body.actNum;
+    // let actNum = req.body.actNum;
+    let actNum = req.session.accountNumber;
+    console.log(actNum);
     let loan_id;
     let installementId;
     console.log("installement amount"+installementAmount);
@@ -73,7 +75,7 @@ router.post('/', function(req,res){
                             }
                             res.redirect('/empProfile');
                             console.log('Transaction Complete.');
-                            conn.end();
+                            // conn.end();
                           });
         
                     });

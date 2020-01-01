@@ -78,9 +78,10 @@
             </div>
             </div>
         <% }%>
-        
         <div class="col-md-8">
+        
             <div class="row">
+               
                 <!-- <div class="col-md-2">
                     <a class="btn btn-primary" href="depositMoney" type="button">Deposit</a>
                 </div>
@@ -102,17 +103,14 @@
                     </button>
                 </div>
 
-                <div class="col-md-2">
-                    <a href="normalLoanRequest" class="btn btn-primary" aria-expanded="false">Loan Request</a>
-                </div>
                 <!-- <div class="row"> -->
                     <!-- deposit collaps -->
                     <div class="collapse" id="depositDiv">
                         <form action="depositMoney" method="post">
                             <div class="form-group">
-                            <label for="">Amount :</label>
-                            <input type="text" class="form-control" name="amount" id="" aria-describedby="helpId" placeholder="Amount to Doeposit">
-                            <input type="hidden" name="accNo" value="<%=accNo%>">
+                                <label for="">Amount :</label>
+                                <input type="text" class="form-control" name="amount" id="" aria-describedby="helpId" placeholder="Amount to Doeposit">
+                                <input type="hidden" name="accNo" value="<%=accNo%>">
                             </div>
                             <button type="submit" class="btn btn-primary">Deposit</button>
                         </form>
@@ -121,16 +119,20 @@
                     <div class="collapse" id="withdrawDiv">
                         <form action="withdrawMoney" method="post">
                             <div class="form-group">
-                            <label for="">Amount :</label>
-                            <input type="text" class="form-control" name="amount" id="" aria-describedby="helpId" placeholder="Amount to Withdraw">
-                            <input type="hidden" name="accNo" value="<%=accNo%>">
+                                <label for="">Amount :</label>
+                                <input type="text" class="form-control" name="amount" id="" aria-describedby="helpId" placeholder="Amount to Withdraw">
+                                <input type="hidden" name="accNo" value="<%=accNo%>">
                             </div>
                             <button type="submit" class="btn btn-primary">Withdraw</button>
                         </form>
                     </div>
-                <!-- </div> -->
-            </div>
+                    <!-- </div> -->
+                    <a href="normalLoanRequest" class="btn btn-outline-success" aria-expanded="false">Loan Request</a>
+                    <a href="loanInstallement" class="btn btn-outline-success" aria-expanded="false" >Loan Installement</a>
+                </div>
         </div>
+
+       
     </div>
 
 

@@ -4,7 +4,17 @@ const app = express();
 var conn = require('./connection');
 
 router.get('/',function(req,res,next){
-    let emp_id = req.session.emp_id;
+
+    var sessionCheck = false;
+    
+    if((req.session.logtype == "manager")){ // check session.Is logged in...
+        if(req.session.username){
+            sessionCheck = true;
+        }
+    }
+
+    if(sessionCheck){
+        let emp_id = req.session.emp_id;
     conn.query(`SELECT branch_id FROM employee where emp_id = '${emp_id}'` , function(err,result){
         if(err){
             console.log(err);
@@ -14,8 +24,12 @@ router.get('/',function(req,res,next){
             
         }
     });
-    res.render('branchManagerProfile');
+    res.render('branchManagerProfile',{msg:null,branch:req.session.branch,emp:req.session.username});
 
+    }
+    else{
+        res.render('login');
+    }
 });
 
 

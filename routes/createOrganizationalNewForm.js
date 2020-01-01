@@ -10,23 +10,29 @@ router.get('/',function(req,res,next){
 
 router.post('/',function(req,res){
     let reg_num = req.session.reg_num;
-    console.log(reg_num);
+    // console.log(reg_num);
     let name = req.body.name;
     let dos = req.body.dos;
-    let uname = req.body.uname;
-    let psw = req.body.psw;
-    let branchId = req.body.branchId;
-    let streetNum = req.body.streetNum;
-    let street = req.body.street;
-    let city = req.body.city;
-    let contactNum = req.body.contactNum;
-    let email = req.body.email;
-    let custId = customId();    
-    let actId = accountId();
-    let type = req.body.type;
-    let balance = parseFloat(req.body.balance);
-    console.log(type);
-    console.log(custId);
+    let accType = req.body.accType;
+    console.log(accType);
+    let accPlan = req.body.accPlan;
+    console.log(accPlan);
+    let uname = req.body.username;
+    let psw = req.body.password;
+
+    //to be continued
+    // let branchId = req.body.branchId;
+    // let streetNum = req.body.streetNum;
+    // let street = req.body.street;
+    // let city = req.body.city;
+    // let contactNum = req.body.contactNum;
+    // let email = req.body.email;
+    // let custId = customId();    
+    // let actId = accountId();
+    // let type = req.body.type;
+    // let balance = parseFloat(req.body.balance);
+    // console.log(type);
+    // console.log(custId);
 
     function checkRegNum(){
         conn.query('SELECT count(reg_num) as count FROM organization WHERE reg_num = ' + reg_num, (err,result) => {
@@ -138,7 +144,7 @@ router.post('/',function(req,res){
 
     }
             
-checkRegNum();
+// checkRegNum();
 });
 
 module.exports = router;

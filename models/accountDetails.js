@@ -92,7 +92,7 @@ function isPersonalOrOrganization(accNo,callback){
 }
 
 function isSavingOrCurrent(accNo,callback){
-
+    
     conn.query(`SELECT COUNT(account_num) as count , transaction_count FROM saving_account WHERE account_num ='${accNo}'`,function(err,result){
         if(err){console.error(err);}
         else if(result[0].count == 1){
@@ -140,11 +140,13 @@ function getAccounts(username,callback){
     //this function returns the all the accounts thah customer has
     //should input the username 
     var details = [];
+    var accNos = [];
     conn.query(`SELECT * FROM customer_login NATURAL JOIN person_details WHERE username = '${username}'`,async function(err,result){
         if(err){console.error(err)}
         else if(result.length > 0){            
             result.forEach(element => {
                 details.push({accNo:element.account_num,balance:element.balance,branch:element.branch_name,state:element.state});
+                accNos.push(element.account_num);
             });
             callback(null,details);
             
@@ -154,6 +156,7 @@ function getAccounts(username,callback){
                 else if(result.length > 0){
                     result.forEach(element => {
                         details.push({accNo:element.account_num,balance:element.balance,branch:element.branch_name,state:element.state});
+                        accNos.push(element.account_num);
                     });
                     callback(null,details);
                 }else{
@@ -164,6 +167,26 @@ function getAccounts(username,callback){
         }
     });
 
+}
+
+function getAccDetailsForOnline(username,callback){
+    getAccounts(username,function(err,result){
+        if(result){
+            var newRes = result;
+            console.log(newRes);
+            console.log("aaa");
+            for(var i=0;i<result.length;i++){
+                getAccDetails(result[i].accNo,function(req,result){
+                    console.log("amklsksjkkkkkkkkkkk");
+                    console.log(newRes[i]);
+                    // console.log(result.accType);
+                });
+                if(i == result.length-1){
+                    callback(null,newRes);
+                }
+            }
+        }
+    });
 }
 
 async function getMultipleAccDetails(accNumbers){
@@ -199,4 +222,4 @@ async function getMultipleAccDetails(accNumbers){
 
 }
 
-module.exports = {getAccDetails,checkAccDetails,getAccounts,getMultipleAccDetails};
+module.exports = {getAccDetails,checkAccDetails,getAccounts,getMultipleAccDetails,getAccDetailsForOnline,isSavingOrCurrent};
