@@ -30,7 +30,9 @@
       <div class="row">
         <div class="col-xl-9">
           <h5 class="mb-5"><%=accNo%></h5>
+          <%if (accType == "saving"){%>
           <a type="button" class="btn btn-primary" href="onlineFD">CREATE FD</a>
+          <%}%>
           <a type="button" class="btn btn-primary" href="moneyTransfer">TRANSFER MONEY</a>
 
         </div>

@@ -112,10 +112,10 @@ router.post('/', function (req, res) {
                 if (result.length == 1) {
                     updateDB();
                     //res.send("correct");
-                    console.log(result);
+                    // console.log(result);
                 } else {
                     
-                    res.send("fucker");
+                    res.send("aa");
                 }
             }
         });
