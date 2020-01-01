@@ -13,7 +13,7 @@ router.post('/',function(req,res){
     conn.query(`SELECT count(reg_num) as count FROM organization WHERE reg_num = '${reg_num}'`, (err,result) => {
         if(err){
             console.log(err);
-            res.send('ddd');
+            //res.send('ddd');
         }else{
             if(result[0].count == 0){
                 res.redirect('/createOrganizationalNewForm')

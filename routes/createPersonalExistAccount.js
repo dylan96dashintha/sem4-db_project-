@@ -94,7 +94,7 @@ router.post('/', function (req, res) {
 
                         } else {
                             console.log("7");
-                            res.send("successfully updated the db...");
+                            res.send("Account Created...");
                             conn.end();
                         }
                     });
