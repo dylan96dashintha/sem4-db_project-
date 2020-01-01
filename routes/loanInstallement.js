@@ -73,7 +73,7 @@ router.post('/', function(req,res){
                             }
                             res.redirect('/empProfile');
                             console.log('Transaction Complete.');
-                            conn.end();
+                            // conn.end();
                           });
         
                     });

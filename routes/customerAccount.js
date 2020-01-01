@@ -35,7 +35,7 @@ router.post('/',function(req,res,next){
             if(result.accOwnerType == null || result.accType == null){
                 res.render('employee',{msg:"Wrong Account Number",branch:req.session.branch,emp:req.session.username});
             }else{
-                console.log(result);
+                req.session.accountNumber = accNo;
                 res.render('customerServices',result);
             }
         });
