@@ -23,7 +23,8 @@ router.post('/',function(req,res){
     //let nic = req.body.nic;
     let uname = req.body.uname;
     let psw = req.body.psw;
-    let branchId = req.body.branchId;
+    let savingType = req.body.savingType;
+    let branchId = req.session.branch_id;
     let custId = customId();
     let actId = accountId();
     let type = req.body.type;
@@ -32,7 +33,7 @@ router.post('/',function(req,res){
     console.log(custId); 
     
     function checkNic(){
-        conn.query('SELECT count(nic) as count FROM person WHERE nic = ' + nic, (err,result) => {
+        conn.query(`SELECT count(nic) as count FROM person WHERE nic = '${nic}'`, (err,result) => {
             console.log(result);
             if (result[0].count == 0){
                 checkCustomId();
@@ -71,77 +72,137 @@ router.post('/',function(req,res){
                 console.log(result.length);   
                 checkAccountId()
             }else {
-                updateDb();
+                checkMinimumBalance();
             }
         });
         
     }
 
-    function updateDb(){
     
-    // console.log(`INSERT INTO customer(customer_id,branch_id) VALUES (${custId},${branchId})`);
-        conn.query(`INSERT INTO customer(customer_id,branch_id) VALUES ('${custId}','${branchId}')`,function(err,result){
-            if (err) {
-                res.send("Error in updating customer table");
+    function checkMinimumBalance(){
+        conn.query(`SELECT minimum_val as min FROM account_type where type_id = ${savingType}` ,function(err,result){
+            if(err){
+                res.send(err);
             }else{
+                if (balance >= result[0].min){
+                    updateDb();
+                }else{
+                    res.redirect('/createPersonalNewForm');
+                }
+            }
+        });
+
+
+    }
+
+
+
+
+    function updateDb(){
+        conn.beginTransaction(function (err) {
+            if (err) { throw err; }
+            conn.query(`INSERT INTO customer(customer_id,branch_id) VALUES ('${custId}','${branchId}')`,function(err,result){
+                if (err) {
+                    return conn.rollback(function(err){
+                        res.send("Error in updating customer table");
+                    });
+                }
                 conn.query(`INSERT INTO login(username,psw) VALUES ('${uname}','${psw}')`,function(err,result){
                     if (err) {
                         console.log(err);
-                        res.send("Error in updating login table");
-                    }else{
-                        conn.query(`INSERT INTO  person(nic,first_name,last_name,surname,street_num,street,city,dob,contact_num,email_address,customer_id) VALUES ('${nic}','${firstName}','${lastName}','${surname}','${streetNum}','${street}','${city}','${dob}','${contactNum}','${email}','${custId}')`,function(err,result){
-                            if (err) {
-                                res.send("err in updatin person table");
-                            }else{
-                                conn.query(`INSERT INTO customer_login(username,customer_id) VALUES ('${uname}','${custId}')`,function(err,result){
-                                    if(err){
-                                        res.send("Error in updating customer_login table");
-                                    }else{
-                                        conn.query(`INSERT INTO account(account_num,branch_id,balance,start_time,state,customer_id) VALUES ('${actId}','${branchId}','${balance}',curdate(),1,'${custId}')`,function(err,result){
-                                            if (err) {
-                                                res.send("unsuccessful in updating account table");
-                                            }else {
-                                                if(type){
-                                                    conn.query(`INSERT INTO saving_account(account_num,transaction_count,balance) VALUES ('${actId}',0,'${balance}')`,function(err,result){
-                                                        if (err) {
-                                                            res.send("unable to update saving_account entity");
-                                                        }else{
-                                                            res.send("successfully updated the db...");   
-                                                        }
-                                                    });
-                                                }else {
-                                                    conn.query(`INSERT INTO current_account(account_num,balance) VALUES ('${actId}','${balance}')`,function(err,result){
-                                                        if (err) {
-                                                            res.send("unable to update current_account entity");
-                                                        }else {
-                                                            res.send("successfully updated the db...");
-                                                        }
-                                                    
-                                                    });
-                                    
-                                                }
-                                    
-                                            }
-                                    
-                                        });                
-                                    
-                                    }
-                                
-                                });
-                            
-                            }
-                    
+                       
+                        return conn.rollback(function(err){
+                            res.send("Error in updating login table");
                         });
-        
                     }
-        
+                    conn.query(`INSERT INTO  person(nic,first_name,last_name,surname,street_num,street,city,dob,contact_num,email_address,customer_id) VALUES ('${nic}','${firstName}','${lastName}','${surname}','${streetNum}','${street}','${city}','${dob}','${contactNum}','${email}','${custId}')`,function(err,result){
+                        if (err) {
+                            console.log(err);
+                       
+                            return conn.rollback(function(err){
+                                res.send("err in updatin person table");
+                            });
+                        }
+                        conn.query(`INSERT INTO customer_login(username,customer_id) VALUES ('${uname}','${custId}')`,function(err,result){
+                            if(err){
+                                console.log(err);
+                       
+                            return conn.rollback(function(err){
+                                res.send("Error in updating customer_login table");
+                            });
+                        }
+                        conn.query(`INSERT INTO account(account_num,branch_id,balance,start_time,state,customer_id) VALUES ('${actId}','${branchId}','${balance}',curdate(),1,'${custId}')`,function(err,result){
+                            if (err) {
+                                console.log(err);
+                       
+                                return conn.rollback(function(err){
+                                    res.send("unsuccessful in updating account table");
+                                });
+                            }
+                            if(type){
+                                conn.query(`INSERT INTO saving_account(account_num,transaction_count,balance,type_id,Date,interest_amount) VALUES ('${actId}',0,'${balance}','${savingType}',curdate(),'0')`,function(err,result){
+                                    if (err) {
+                                        console.log(err);
+                       
+                                        return conn.rollback(function(err){
+                                            res.send("unable to update saving_account entity");
+                                        });
+                                        
+                                    }else{
+                                        conn.commit(function(err) {
+                                            if (err) {
+                                                return conn.rollback(function(err) {
+                                                    throw err
+                                                })
+                                            }
+                                            res.redirect('/customerAccount');
+                                             
+                                        });
+                                    }
+                                });
+                            }else {
+                                conn.query(`INSERT INTO current_account(account_num,balance) VALUES ('${actId}','${balance}')`,function(err,result){
+                                    if (err) {
+                                        console.log(err);
+                       
+                                        return conn.rollback(function(err){
+                                            res.send("unable to update current_account entity");
+                                        });
+                                       
+                                    }else {
+                                        conn.commit(function(err) {
+                                            if (err) {
+                                                return conn.rollback(function() {
+                                                    throw err
+                                                });
+                                            }
+                                            res.redirect('/customerAccount');
+                                             
+                                        });
+                                    }
+                                });
+                            }
+                            });
+                        });
+                    });
                 });
-        
-            }
-        
+            });
         });
-
+    
+                                
+                                
+        
+    
     }
+                               
+                              
+                           
+                         
+                
+                    
+        
+        
+       
             
 checkNic();
 });

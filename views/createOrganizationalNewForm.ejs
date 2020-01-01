@@ -12,6 +12,15 @@
 
   <title>Online Portal-Bank A</title>
 </head>
+<style>
+.hide {
+  display: none;
+}
+p {
+  font-weight: bold;
+}
+
+</style>
 
 <body>
 
@@ -34,40 +43,32 @@
 
       <div class="row">
         <div class="col-xs-12">
-          <span>Account Type: </span>
-          <input name="accType"  value="1" type="radio" data-toggle="collapse" data-target="#collapseOne" /> Saving Account
-
-          <input name="accType" value="2" type="radio" data-toggle="collapse" data-target="#collapseOne" checked /> Corrent
-          Account
-
-          <div class="panel-group" id="accordion">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h4 class="panel-title">
-                </h4>
-              </div>
-              <div id="collapseOne" class="panel-collapse collapse">
-                <div class="panel-body">
-                  <div class="form-row">
-                    <div class="form-group col-md-12">
-                      <label for="name">Organization Name</label>
-                      <select name="accPlan" class="form-control">
-                        <option value="">-- Select Type --</option>
-                        <option value="1">Child</option>
-                        <option value="2">Teen</option>
-                        <option value="3">Adult</option>
-                        <option value="4">Senior(60+)</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <label for="accountType">Choose Account Type:<br>
+            <input type="radio" name="type" value="false" onclick="show1();" />
+            Current Account
+            <input type="radio" name="type" value="true" onclick="show2();" />
+            Saving Account
+            <div id="div1" class="hide">
+              <hr>
+              <p>Select the Saving Account Type:</p>
+              <input type="radio" value="1" name="savingType">
+              Child Account &nbsp;
+              <input type="radio" value="2" name="savingType">
+              Teen Account &nbsp;
+              <input type="radio" value="3" name="savingType">
+              Adult Account &nbsp;
+              <input type="radio" value="4" name="savingType">
+              Senior Account &nbsp;
             </div>
-          </div>
         </div>
       </div>
 
-
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="balance">Balance</label>
+          <input type="text" name="balance" class="form-control" id="balance" placeholder="Balance">
+        </div>
+      </div>
       <div class="form-row">
         <div class="form-group col-md-6">
           <label for="name">User Name</label>
@@ -85,7 +86,7 @@
       <div class="form-row">
         <div class="form-group col-md-6">
           <label for="name">Street No.</label>
-          <input type="text" name="streetNo" class="form-control" id="inputEmail4" placeholder="Street No">
+          <input type="text" name="streetNum" class="form-control" id="inputEmail4" placeholder="Street No">
         </div>
         <div class="form-group col-md-6">
           <label for="inputPassword4">Street</label>
@@ -108,7 +109,7 @@
       <div class="form-row">
         <div class="form-group col-md-6">
           <label for="name">Contact Number</label>
-          <input type="text" name="contactNo" class="form-control" id="inputEmail4" placeholder="Contact Number">
+          <input type="text" name="contactNum" class="form-control" id="inputEmail4" placeholder="Contact Number">
         </div>
         <div class="form-group col-md-6">
           <label for="inputPassword4">Email</label>
@@ -135,5 +136,14 @@
 
 
 </body>
+
+<script>
+  function show1(){
+    document.getElementById('div1').style.display ='none';
+  }
+  function show2(){
+    document.getElementById('div1').style.display = 'block';
+  }
+  </script>
 
 </html>

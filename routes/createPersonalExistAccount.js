@@ -10,8 +10,9 @@ router.get('/', function (req, res, next) {
 router.post('/', function (req, res) {
     console.log('sffdfdf');
     let type = req.body.type;
-    let branchId = req.body.branchId;
+    let branchId = req.session.branch_id;
     let balance = req.body.balance;
+    let savingType = req.body.savingType;
     let nic = req.session.nic;
     //let nic = "212121";
     // console.log(nic);
@@ -23,9 +24,9 @@ router.post('/', function (req, res) {
             if (err) {
                 res.send("error in getting customer id");
             } else {
-                console.log("aaaaaaaaaaaaaaaaaaaaaaa");
+                console.log(`SELECT customer_id  FROM person WHERE nic = '${nic}'`);
                 custId = result[0].customer_id;
-                //console.log(custId);
+                console.log(custId);
                 checkAccountId();
             }
         });
@@ -44,16 +45,41 @@ router.post('/', function (req, res) {
                 console.log(result.length);
                 checkAccountId()
             } else {
-                updateDb();
+                checkMinimumBalance();
             }
         });
 
     }
 
+    function checkMinimumBalance(){
+        conn.query(`SELECT minimum_val as min FROM account_type where type_id = ${savingType}` ,function(err,result){
+            if(err){
+                res.send(err);
+            }else{
+                if (balance >= result[0].min){
+                    updateDb();
+                }else{
+                    res.redirect('/createPersonalExistAccount');
+                }
+            }
+        });
+
+
+    }
+
+
     function updateDb(){
         conn.beginTransaction(function (err) {
             if (err) { throw err; }
-            console.log(`INSERT INTO account(account_num,branch_id,balance,start_time,state,customer_id) VALUES ('${actId}','${branchId}','${balance}',curdate(),1,'${custId}')`);
+            conn.query(`INSERT INTO customer(customer_id,branch_id) VALUES('${custId}','${branchId}')` ,function(err,result) { 
+                if (err) {
+                    console.log(err);
+                    return conn.rollback( function (err) {
+                        res.send("asasassa");
+                    });
+
+                }
+                console.log(`INSERT INTO account(account_num,branch_id,balance,start_time,state,customer_id) VALUES ('${actId}','${branchId}','${balance}',curdate(),1,'${custId}')`);
             conn.query(`INSERT INTO account(account_num,branch_id,balance,start_time,state,customer_id) VALUES ('${actId}','${branchId}','${balance}',curdate(),1,'${custId}')`, function (err, result) {
                 if (err) {
                     return conn.rollback(function (err) {
@@ -64,7 +90,7 @@ router.post('/', function (req, res) {
 
                 if (type) {
                     console.log(`INSERT INTO saving_account(account_num,transaction_count,balance) VALUES ('${actId}',0,${balance})`);
-                    conn.query(`INSERT INTO saving_account(account_num,transaction_count,balance) VALUES ('${actId}',0,${balance})`, function (err, result) {
+                    conn.query(`INSERT INTO saving_account(account_num,transaction_count,balance,type_id,Date) VALUES ('${actId}',0,${balance},'${savingType}',curdate())`, function (err, result) {
                         if (err) {
                             return conn.rollback(function (err) {
                                 res.send("unable to update saving_account entity");
@@ -77,8 +103,8 @@ router.post('/', function (req, res) {
                                         throw err
                                     })
                                 }
-                                res.send("successfully updated the db...");
-                                conn.end();  
+                                res.redirect('/customerAccount');
+                              
                             })
                         }
                     });
@@ -93,15 +119,24 @@ router.post('/', function (req, res) {
                             });
 
                         } else {
-                            console.log("7");
-                            res.send("successfully updated the db...");
-                            conn.end();
+                            conn.commit(function(err) {
+                                if (err) {
+                                    return conn.rollback(function() {
+                                        throw err
+                                    })
+                                }
+                                res.redirect('/customerAccount');
+                              
+                            })
+                            
                         }
                     });
 
                 }
         
             });
+            });
+            
         });
     }
 

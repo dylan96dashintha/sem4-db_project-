@@ -66,7 +66,7 @@ router.post('/', function (req, res) {
                                         res.send("unsuccessful in updating balance column entity");
                                     });
                                 }
-                                conn.query(`INSERT INTO installement(loan_id,installement_amount,checked_date,net_loan_amount) VALUES('${loanId}' , ${installement_amt} , curdate() , ${loanAmount})` , function(err,result){
+                                conn.query(`INSERT INTO installement(loan_id,installement_amount,date_pavement,checked_date,net_loan_amount) VALUES('${loanId}' , ${installement_amt} , curdate(),curdate() , ${loanAmount})` , function(err,result){
                                     if(err) {
                                         conn.rollback(function(err){
                                             res.send("unsuccessfull in installement...");
