@@ -15,7 +15,7 @@ function genarateId(){
 function moneyTransfer(transferingAcc,transferedAcc,amount,callback){
     //TRANSFERD SALLI LABUNU ACCOUNT EKA
     //TRABSFERING SALLI YAWAPU ACCOUNTT EKA
-    var transferId = genarateId();
+    var transactionID = genarateId();
     var d = new Date();
     var date = d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate();
     var time = d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
@@ -25,13 +25,18 @@ function moneyTransfer(transferingAcc,transferedAcc,amount,callback){
         if(result == "success"){
             depositMoney(transferedAcc,amount,"ONLINE-MONEY-RECEIVE",function(err,result){
                 if(result == "currentSuccess" || result == "savingSuccess"){
-                    conn.query(`INSERT INTO money_transfer (transfer_id, transfered_acc, transfering_acc, date, time, amount) VALUES ('${transferId}','${transferedAcc}','${transferingAcc}','${date}','${time}','${amount}')`,function(err,result){
-                        if(err){
-                            console.error(err);
-                            callback(true,"Error in create logs");
-
-                        }else{
-                            callback(null,"moneyTransferSuccess");
+                    conn.query(`INSERT INTO transaction (transaction_id, date, time_transaction, transaction_type,account_num) VALUES ('${transactionID}','${date}','${time}',"ONLINE-MONEY-TRANSACTION",'${transferingAcc}')`,function(err,result){
+                        if(err){console.error(err)}
+                        else{
+                            conn.query(`INSERT INTO online_transaction (transaction_id, amount, account) VALUES ('${transactionID}','${amount}','${transferedAcc}')`,function(err,result){
+                                if(err){
+                                    console.error(err);     
+                                    callback(true,"Error in create logs");
+        
+                                }else{
+                                    callback(null,"moneyTransferSuccess");
+                                }
+                            });
                         }
                     });
                 }else{
