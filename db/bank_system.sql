@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 01, 2020 at 01:54 PM
+-- Generation Time: Jan 01, 2020 at 02:51 PM
 -- Server version: 10.4.10-MariaDB
 -- PHP Version: 7.3.12
 
@@ -54,11 +54,11 @@ CREATE TABLE `account` (
 --
 
 INSERT INTO `account` (`account_num`, `branch_id`, `balance`, `start_time`, `state`, `customer_id`) VALUES
-('80123', '00001', 1500, '2019-12-03', 0, '777777'),
-('80234', '0001', 8397.62, '2019-12-09', 0, '666666'),
-('80345', '00002', 1433.62, '2019-12-17', 1, '555555'),
-('80456', '00002', 1000, '2019-12-03', 1, '888888'),
-('80567', '00001', 624.62, '2019-12-17', 1, '777777'),
+('80123', '00001', 3830.7, '2019-12-03', 0, '777777'),
+('80234', '0001', 1254.4, '2019-12-09', 0, '666666'),
+('80345', '00002', 2420, '2019-12-17', 1, '555555'),
+('80456', '00002', 1379.84, '2019-12-03', 1, '888888'),
+('80567', '00001', 6050, '2019-12-17', 1, '777777'),
 ('80678', '00002', 1100, '2019-12-24', 1, '777777');
 
 -- --------------------------------------------------------
@@ -662,18 +662,21 @@ CREATE TABLE `saving_account` (
   `account_num` varchar(10) NOT NULL,
   `transaction_count` int(10) NOT NULL,
   `balance` float(15,2) NOT NULL,
-  `type_id` int(1) NOT NULL
+  `type_id` int(1) NOT NULL,
+  `Date` date NOT NULL,
+  `interest_amount` float(11,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `saving_account`
 --
 
-INSERT INTO `saving_account` (`account_num`, `transaction_count`, `balance`, `type_id`) VALUES
-('80123', 0, 1500.00, 4),
-('80234', 5, 8397.62, 1),
-('80345', 2, 1433.62, 2),
-('80567', 3, 624.62, 3);
+INSERT INTO `saving_account` (`account_num`, `transaction_count`, `balance`, `type_id`, `Date`, `interest_amount`) VALUES
+('80123', 0, 3830.70, 4, '2020-01-01', 440.70),
+('80234', 5, 1254.40, 1, '2020-01-01', 134.40),
+('80345', 2, 2420.00, 2, '2020-01-01', 220.00),
+('80456', 0, 1379.84, 1, '2020-01-01', 147.84),
+('80567', 3, 6050.00, 3, '2020-01-01', 550.00);
 
 --
 -- Triggers `saving_account`
@@ -1107,14 +1110,17 @@ UPDATE installement SET  late_not_late_state = 'nlate'  , checked_date = CURRENT
 
 END$$
 
-CREATE DEFINER=`root`@`localhost` EVENT `Account_Interest` ON SCHEDULE EVERY 1 DAY STARTS '2019-12-01 00:01:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
-UPDATE interest,saving_account,account_type SET interest.interest_amount = (saving_account.balance*0.12), saving_account.balance = saving_account.balance + interest.interest_amount, interest.Date = CURRENT_DATE WHERE account_type.type='Children' and CURRENT_DATE - interest.Date = 30;
+CREATE DEFINER=`root`@`localhost` EVENT `Account_Interest` ON SCHEDULE EVERY 1 DAY STARTS '2019-12-01 19:18:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
 
-UPDATE interest,saving_account,account_type SET interest.interest_amount = (saving_account.balance*0.10), saving_account.balance = saving_account.balance + interest.interest_amount, interest.Date = CURRENT_DATE WHERE account_type.type='Adult(18+)' and CURRENT_DATE - interest.Date = 30;
+UPDATE saving_account SET interest_amount=(balance*0.12), Date = CURRENT_DATE WHERE (account_num) in (SELECT account_num FROM saving_account WHERE type_id=1) AND CURRENT_DATE - Date = 30;
 
-UPDATE interest,saving_account,account_type SET interest.interest_amount = (saving_account.balance*0.10), saving_account.balance = saving_account.balance + interest.interest_amount, interest.Date = CURRENT_DATE WHERE account_type.type='Teen' and CURRENT_DATE - interest.Date = 30;
+UPDATE saving_account SET interest_amount=(balance*0.1), Date = CURRENT_DATE WHERE (account_num) in (SELECT account_num FROM saving_account WHERE type_id=2) AND CURRENT_DATE - Date = 30;
 
-UPDATE interest,saving_account,account_type SET interest.interest_amount = (saving_account.balance*0.13), saving_account.balance = saving_account.balance + interest.interest_amount, interest.Date = CURRENT_DATE WHERE account_type.type='Senior(60+' and CURRENT_DATE - interest.Date = 30;
+UPDATE saving_account SET interest_amount=(balance*0.1), Date = CURRENT_DATE WHERE (account_num) in (SELECT account_num FROM saving_account WHERE type_id=3) AND CURRENT_DATE - Date = 30;
+
+UPDATE saving_account SET interest_amount=(balance*0.13), Date = CURRENT_DATE WHERE (account_num) in (SELECT account_num FROM saving_account WHERE type_id=4) AND CURRENT_DATE - Date = 30;
+
+UPDATE saving_account SET balance = balance + interest_amount;
 
 END$$
 
