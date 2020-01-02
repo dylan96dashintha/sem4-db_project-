@@ -17,6 +17,7 @@
           <%if (msg != null){%>
             <p class="success"><%=msg%></p>
             <%}   %>
+          <a class="btn btn-primary" href="customProfile">Change Account</a>
           <a class="btn btn-primary" href="logout">Log out</a>
         </div>
     </nav>
@@ -32,9 +33,11 @@
           <h5 class="mb-5"><%=accNo%></h5>
           <%if (accType == "saving"){%>
           <a type="button" class="btn btn-primary" href="onlineFD">CREATE FD</a>
-          <%}%>
           <a type="button" class="btn btn-primary" href="moneyTransfer">TRANSFER MONEY</a>
+
           <a type="button" class="btn btn-primary" href="onlineLoanReq">ONLINE LOAN REQUEST</a>
+          <%}%>
+
         </div>
         <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
           

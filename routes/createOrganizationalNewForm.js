@@ -10,7 +10,7 @@ router.get('/',function(req,res,next){
 
 router.post('/',function(req,res){
     let reg_num = req.session.reg_num;
-    // console.log(reg_num);
+    console.log(reg_num);
     let name = req.body.name;
     let dos = req.body.dos;
     let accType = req.body.accType;
@@ -39,7 +39,7 @@ router.post('/',function(req,res){
             if (result[0].count == 0){
                 checkCustomId();
             }else {
-                res.send("error bro");
+                res.send("error");
             }
             
         });
@@ -90,9 +90,9 @@ router.post('/',function(req,res){
                         console.log(err);
                         res.send("Error in updating login table");
                     }else{
-                        conn.query(`INSERT INTO  organization(reg_num,name,start_date,street_num,street,city,contact_num,email_address,customer_id) VALUES ('${regNum}','${name}','${dos}','${streetNum}','${street}','${city}','${contactNum}','${email}','${custId}')`,function(err,result){
+                        conn.query(`INSERT INTO organization(reg_num,name,start_date,street_num,street,city,contact_num,email_address,customer_id) VALUES ('${regNum}','${name}','${dos}','${streetNum}','${street}','${city}','${contactNum}','${email}','${custId}')`,function(err,result){
                             if (err) {
-                                res.send("err in updatin Organization table");
+                                res.send("Error in updating Organization table");
                             }else{
                                 conn.query(`INSERT INTO customer_login(username,customer_id) VALUES ('${uname}','${custId}')`,function(err,result){
                                     if(err){
@@ -103,7 +103,7 @@ router.post('/',function(req,res){
                                                 res.send("unsuccessful in updating account table");
                                             }else {
                                                 if(type){
-                                                    conn.query(`INSERT INTO saving_account(account_num,transaction_count,balance) VALUES ('${actId}',0,'${balance}')`,function(err,result){
+                                                    conn.query(`INSERT INTO saving_account(account_num,transaction_count,Date,balance) VALUES ('${actId}',0,curdate(),'${balance}')`,function(err,result){
                                                         if (err) {
                                                             res.send("unable to update saving_account entity");
                                                         }else{
@@ -143,9 +143,14 @@ router.post('/',function(req,res){
         });
 
     }
+//<<<<<<< HEAD
             
 // checkRegNum();
 res.send("Account Created")
+//=======
+       res.send("Account Created");     
+checkRegNum();
+//>>>>>>> 974aec16f59011f4f4a3157a3b4a9cbcb3e7c33a
 });
 
 module.exports = router;

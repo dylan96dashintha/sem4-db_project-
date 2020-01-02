@@ -87,9 +87,10 @@ router.post('/',function(req,res){
                                     throw err;
                                   });
                                 }
-                                res.send("successfully updated");
-                                console.log('Transaction Complete.');
+                                // res.send("successfully updated");
+                                // console.log('Transaction Complete.');
                                 // conn.end();
+                                res.redirect('customProfile');
                               });
                         });
                     }
