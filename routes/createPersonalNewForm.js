@@ -25,6 +25,7 @@ router.post('/',function(req,res){
     let psw = req.body.psw;
     let savingType = req.body.savingType;
     let branchId = req.session.branch_id;
+    console.log(branchId);
     let custId = customId();
     let actId = accountId();
     let type = req.body.type;
@@ -104,6 +105,7 @@ router.post('/',function(req,res){
             conn.query(`INSERT INTO customer(customer_id,branch_id) VALUES ('${custId}','${branchId}')`,function(err,result){
                 if (err) {
                     return conn.rollback(function(err){
+                        console.log(`INSERT INTO customer(customer_id,branch_id) VALUES ('${custId}','${branchId}')`);
                         res.send("Error in updating customer table");
                     });
                 }

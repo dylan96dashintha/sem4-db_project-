@@ -24,7 +24,7 @@ router.post('/', function (req, res) {
             if (err) {
                 res.send("error in getting customer id");
             } else {
-                console.log("abc");
+                console.log("correct");
                 custId = result[0].customer_id;
                 checkAccountId();
             }

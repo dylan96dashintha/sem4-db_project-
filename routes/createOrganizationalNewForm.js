@@ -40,7 +40,7 @@ router.post('/',function(req,res){
             if (result[0].count == 0){
                 checkCustomId();
             }else {
-                res.send("error bro");
+                res.send("error");
             }
             
         });
