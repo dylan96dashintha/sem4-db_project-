@@ -145,6 +145,7 @@ router.post('/',function(req,res){
     }
             
 // checkRegNum();
+res.send("Account Created")
 });
 
 module.exports = router;

@@ -41,7 +41,7 @@ function UpdateDB(){
         }
     //    console.log('Update');
     //     conn.end();
-    res.render('employee',{msg:null,branch:req.session.branch,emp:req.session.username});
+    res.render('employee',{msg:"Account successfully closed",branch:req.session.branch,emp:req.session.username});
       });
 
 
